@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.filmmatch.dao.CategoriesDao">
+<!-- 카테고리 분류조회 (계층형 쿼리)
+카테고리id 카테고리 명 카테고리 상위 id
+100	      문구류	
+101	      필기류	    100
+102	      공책	        100
+200	      소장품	
+201	      피규어	    200
+-->
+<select id="selectList" resultType="categories" parameterType="map">
+	SELECT c1.cate_id, c1.cate_name AS cate_sub, c2.cate_name AS cate_name, c2.cate_id as cate_parent
+    FROM categories c1
+    LEFT JOIN categories c2 ON c1.cate_parent_id = c2.cate_id
+    <where>
+        <!-- 소분류 -->
+        <if test="cate_parent_id != null">
+            AND c1.cate_parent_id = #{cate_parent_id}
+        </if>
+        <!-- 대분류 -->
+        <if test="isTopLevel">
+            AND c2.cate_id is null
+        </if>
+
+    </where>
+</select>
+
+  <!-- 선택된 소분류 카테고리의 상위 대분류 id값 구하기 -->
+<select id="isSelected_sub_cate_parent_id" parameterType="int" resultType="int">
+SELECT cate_parent_id
+    FROM categories 
+    where cate_id=#{cate_sub_id}
+</select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

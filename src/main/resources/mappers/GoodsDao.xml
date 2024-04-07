@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.filmmatch.dao.GoodsDao">
+<!-- 목록조회 메인화면 굿즈-->
+<select id="selectList" resultType="goods">
+select * from goods order by goods_idx desc
+</select>
+
+	<!-- 검색된 게시물수 -->
+	<select id="selectRowTotal" resultType="int">
+		select ifnull(count(*),0)  as count  from goods
+      <trim prefix="where" prefixOverrides="or">
+
+      <if test="subject!=null">
+		goods_name like concat('%',#{subject},'%')
+		</if>
+      </trim>
+	</select>
+
+<!-- 목록조회 페이징처리-->
+<select id="selectList_paging" parameterType="map" resultType="goods">
+select * from(
+select
+*,rank() over(order by goods_idx desc) as no
+ from goods
+<trim prefix="where" prefixOverrides="or">
+      <if test="subject!=null">
+		   goods_name like concat('%',#{subject},'%')
+		</if>
+</trim>
+
+)g   where no between #{start} and #{end}  
+</select>
+
+<!-- 상품 하나 조회 -->
+<select id="selectOne" resultType="goods">
+	select * from goods where goods_idx=#{goods_idx}
+</select>
+
+<!-- 상품등록 -->
+<insert id="insert" parameterType="goods">
+     INSERT INTO goods (
+        mem_idx,
+        cate_id,
+        goods_name,
+        goods_contents,
+        goods_price,
+        goods_rate,
+        goods_rate_price,
+        goods_quantity,
+        release_date,
+        goods_brand,
+        image_url,
+        goods_rating,
+        goods_reviews,
+        goods_availability,
+        sale_start_date,
+        sale_end_date,
+        able_minors_buy,
+        country,
+        reg_date
+    ) VALUES (
+        #{mem_idx},
+        #{cate_id},
+        #{goods_name},
+        #{goods_contents},
+        #{goods_price},
+        #{goods_rate},
+        #{goods_rate_price},
+        #{goods_quantity},
+        #{release_date},
+        #{goods_brand},
+        #{image_url},
+        0,
+        0,
+        1,
+        #{sale_start_date},
+        #{sale_end_date},
+        #{able_minors_buy},
+        #{country}
+        ,now()
+    )
+</insert>
+<!-- 상품수정 -->
+<insert id="update" parameterType="goods">
+   update goods  
+   set  goods_name= #{goods_name}
+   ,goods_price= #{goods_price}
+   ,goods_rate=#{goods_rate}
+   , goods_rate_price=#{goods_rate_price}
+   ,goods_contents= #{goods_contents}
+   ,release_date= #{release_date}
+   ,cate_id=#{cate_id}
+   ,sale_start_date=#{sale_start_date}
+   ,sale_end_date=#{sale_end_date}
+   ,goods_brand= #{goods_brand}
+   ,country=#{country}
+   ,able_minors_buy=#{able_minors_buy}
+   ,mod_date=now()
+   where  goods_idx=#{goods_idx}
+</insert>
+<!-- 상품 삭제 -->
+<delete id="delete" parameterType="int">
+   delete from goods where goods_idx=#{goods_idx}
+</delete>
+<!--사진 경로값 수정 -->
+<update id="update_image_url" parameterType="goods">
+	update goods 
+	set image_url=#{image_url}
+	,mod_date=now() 
+	where goods_idx=#{goods_idx}
+	</update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

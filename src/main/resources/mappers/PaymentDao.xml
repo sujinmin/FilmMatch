@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.filmmatch.dao.PaymentDao">
+
+<!-- 결제정보 인서트 -->
+<insert id="insert_payment_success" parameterType="map">
+INSERT INTO payment (
+    goods_idx
+    , mem_idx
+    , product_count
+    , goods_name
+    , goods_price
+    , goods_rate_price
+    , goods_count_rate_price
+    , goods_count_price
+    , goods_brand
+    , pay_zipcode
+    , pay_addr
+    , pay_name
+    , image_url
+    , country
+    , orderId
+    , isPartialCancelable
+    , suppliedAmount
+    , type
+    , currency
+    , method
+    , vat
+    , deliveryFee
+    , approvedAt
+    , totalAmount
+    , status)
+     VALUES (
+    #{cartvo.goods_idx}
+    , #{cartvo.mem_idx}
+    , #{cartvo.product_count}
+    , #{cartvo.goods_name}
+    , #{cartvo.goods_price}
+    , #{cartvo.goods_rate_price}
+    , #{cartvo.goods_count_rate_price}
+    , #{cartvo.goods_count_price}
+    , #{cartvo.goods_brand}
+    , #{pay_zipcode}
+    , #{pay_addr}
+    , #{pay_name}
+    , #{cartvo.image_url}
+    , #{tosspayvo.country}
+    , #{tosspayvo.orderId}
+    , #{tosspayvo.isPartialCancelable}
+    , #{tosspayvo.suppliedAmount}
+    , #{tosspayvo.type}
+    , #{tosspayvo.currency}
+    , #{tosspayvo.method}
+    , #{tosspayvo.vat}
+    , #{tosspayvo.deliveryFee}
+    , #{tosspayvo.approvedAt}
+    , #{tosspayvo.totalAmount}
+    , #{tosspayvo.status}
+    )
+
+</insert>
+
+<!-- 결제내역 조회 -->
+<select id="select_list_paymemt" parameterType="int" resultType="payment">
+select * from payment where mem_idx=#{mem_idx} order by approvedAt desc
+</select>
+
+<!-- 결제 상세보기 -->
+<select id="payment_select_orderid"  parameterType="String" resultType="payment">
+select * from payment where orderId=#{orderId}
+</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

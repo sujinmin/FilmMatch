@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.filmmatch.dao.SupportDao">
+	
+	<!-- 페이지에 따른 목록조회 -->
+	<select id="selectList" resultType="support">
+		select * from support
+		 <!-- where community_page = ${community_page}
+		 order by b_ref desc, b_step asc  -->
+	</select>
+
+	<!-- 페이지에 1개 조회 -->
+	<select id="selectOne"  parameterType="int" resultType="support">
+		select * from support where b_idx=#{ b_idx }
+	</select>
+
+	
+	<!-- 문의하기(글쓰기) -->
+	<insert id="insert"  parameterType="support">
+       insert into support(b_idx, b_subject, mem_idx, mem_name, b_content, b_regdate) 
+                   values(#{b_idx},#{ b_subject } ,#{ mem_idx },#{ mem_name } , #{ b_content } , now())
+    </insert>
+
+	<!-- 글삭제 -->
+    <delete id="delete" parameterType="int">
+       delete from support where b_idx = #{ b_idx }
+    </delete>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

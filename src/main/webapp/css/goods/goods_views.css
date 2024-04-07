@@ -1,0 +1,35 @@
+   .flex-container {
+            display: flex;
+            justify-content: center;
+           /* align-items: center;*/
+            
+        }
+        .goods_views_box {
+			margin-top: 20px;
+            width: 1500px;
+            
+        }
+        .parent {
+            display: grid;
+            text-align: center;
+            width: 100%;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            grid-column-gap: 0px;
+            grid-row-gap: 0px;
+        }
+        .goods_menu{text-align: right;}
+        .goods_menu a{color: black;}
+        .div1 { grid-area: 1 / 1 / 3 / 3;   }
+        .div1 img{width: 100%; }
+        .div2 { grid-area: 1 / 3 / 3 / 9;    text-align: left;  }
+        .div2 h2{color: black; padding-left: 20px;}
+        .div2 h3{color: black; padding-left: 30px; display: block;  margin-bottom: 10px; /* 원하는 간격 설정 */}
+        .div2 h4{color: black; padding-left: 30px;}
+        .div3 { grid-area: 3 / 1 / 6 / 9;    }
+        .div4 { grid-area: 6 / 1 / 9 / 9;   text-align: left; font-size: 15px; }
+        
+        .div2 a .button .alt{
+			border: black;
+			color: black;
+		}

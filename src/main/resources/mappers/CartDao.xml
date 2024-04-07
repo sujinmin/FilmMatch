@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.filmmatch.dao.CartDao">
+
+<!-- 이미 담긴 상품인가? -->
+<select id="selectOne_goods_idx" resultType="cart" parameterType="map">
+	select * from cart where goods_idx=#{goods_idx} and mem_idx=#{mem_idx}
+</select>
+
+<!-- 목록조회 -->
+<select id="selectList" resultType="cart" parameterType="int">
+select 
+c.goods_idx
+,c.cart_idx
+,c.mem_idx
+,c.product_count
+,c.is_deleted
+,g.goods_name
+,g.goods_rate_price
+,g.goods_price
+,g.goods_brand
+,g.image_url
+,g.country
+from cart c
+left join goods g
+on c.goods_idx=g.goods_idx
+where c.mem_idx=#{mem_idx}
+
+</select>
+
+<!--사용자가 장바구니 화면에서 선택한 상품만을조회 -->
+<select id="selectList_selected" resultType="cart" parameterType="map">
+  select 
+        c.goods_idx,
+        c.cart_idx,
+        c.mem_idx,
+        c.product_count,
+        c.is_deleted,
+        g.goods_name,
+        g.goods_price,
+        g.goods_rate_price,
+        g.goods_price * c.product_count as goods_count_price ,
+        g.goods_rate_price * c.product_count as goods_count_rate_price ,
+        g.goods_brand,
+        g.image_url,
+        g.country
+    from 
+        cart c
+    left join 
+        goods g on c.goods_idx = g.goods_idx
+    where 
+        c.mem_idx = #{mem_idx}
+        and c.cart_idx in
+        <foreach item="item" collection="cart_idx" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+</select>
+
+<!-- 사용자가 선택한(결제화면) 상품의 배송비를 제외한 금액(할인가) -->
+<select id="select_list_total_amount_all" resultType="int" parameterType="map">
+ select 
+         IFNULL(sum(g.goods_rate_price * c.product_count),0) as total_amount_all
+    from 
+        cart c
+    left join 
+        goods g on c.goods_idx = g.goods_idx
+    where 
+        c.mem_idx = #{mem_idx}
+        and c.cart_idx in
+        <foreach item="item" collection="cart_idx" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+</select>
+
+
+<!-- 카트 상품등록하기 -->
+<insert  id="insert" parameterType="cart">
+INSERT INTO cart (mem_idx, goods_idx, product_count) VALUES (#{mem_idx},#{goods_idx},#{product_count})
+</insert>
+
+<!-- 카트 삭제 -->
+<delete id="cart_delete_select" parameterType="int">
+delete from cart where cart_idx=#{cart_idx}
+</delete>
+
+<!-- 관리자에 의한 상품정보 삭제에 따른 카트 업데이트-->
+<update id="goods_admin_delete" parameterType="int">
+update cart set is_deleted=1 where goods_idx=#{goods_idx}
+</update>
+
+<!-- 회원에게 관리자에 의해 삭제된 상품정보(판매중단 등) 로 인한 삭제 통보후 실제 삭제처리 -->
+<delete id="goods_admin_delete_real" parameterType="int">
+delete from cart where is_deleted=1 and mem_idx=#{mem_idx}
+</delete>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
