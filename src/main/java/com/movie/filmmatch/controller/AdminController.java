@@ -143,12 +143,13 @@ public class AdminController {
 
         return "redirect:admin_member.do";
         
-        // else{
-        //     System.out.println(vo);
-        //     System.out.println("회원정보 수정에 실패하였습니다.");
-
-        // }
     }
+    
+    /**
+     * 회원삭제
+     * @param mem_idx
+     * @return
+     */
     @RequestMapping("delete.do")
     public String requestMethodName(@RequestParam int mem_idx) {
         

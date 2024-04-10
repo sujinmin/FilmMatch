@@ -18,7 +18,7 @@ public class EmailService {
     private static final String password = "tbdcfpvkypbqkajn";
     //private static final String to = "mack15@naver.com";
 
-    public static void sendEmail(String toEmail) {
+    public static String sendEmail(String toEmail) {
 
         String code = generateRandomCode();
 
@@ -44,16 +44,21 @@ public class EmailService {
             message.setSubject("이메일 인증번호 확인");
             message.setContent("인증번호 : "+ code , type);
             Transport.send(message);
-            System.out.println("이메일 인증");
+            //System.out.println("이메일 message안의코드 :"+code); //email로 보내진 randomCode
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return code;
+
     }
 
     public static String generateRandomCode() {
         // Generate random 6-digit code
         Random random = new Random();
         int code = 100000 + random.nextInt(900000); // Generates a random number between 100000 and 999999
+        
+        //System.out.println("service의 code:"+code); //생성된 randomCode
         return String.valueOf(code);
        
     }

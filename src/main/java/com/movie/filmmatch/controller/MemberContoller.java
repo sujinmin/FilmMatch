@@ -1,5 +1,8 @@
 package com.movie.filmmatch.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -142,14 +145,14 @@ public class MemberContoller {
 	@ResponseBody
     public String check_id(String mem_id) {
         MemberVo vo = member_dao.selectOneFromId(mem_id);
-        System.out.println(mem_id);
+        System.out.println("입력된 ID:"+mem_id);
 		boolean bResult = vo == null;
 		if(vo!=null)
-		System.out.println(vo.getMem_id());
+		System.out.println("저장되어있는 아이디"+vo.getMem_id());
 
 		JSONObject json = new JSONObject();
 		json.put("result", bResult); //{"result": true}
-		System.out.println(bResult);
+		System.out.println("결과 : "+bResult);
         return json.toString();
     }
 
@@ -205,7 +208,6 @@ public class MemberContoller {
 			}
 	
 			return "member/signup_form";
-
 		} catch (Exception e) {
 			System.err.println("에러 발생: " + e.getMessage());
 			throw e;
@@ -219,22 +221,24 @@ public class MemberContoller {
 
         return "member/main";
     }
-
-	/**
+		/**
 	 * 이메일 mapper
 	 * @return
 	 */
     @RequestMapping("/send_email.do")
 	@ResponseBody
-    public String sendEmail(String email) {
+    public Map<String,String> sendEmail(String email) {
 
-		String randomCode = EmailService.generateRandomCode();
+		//String randomCode = EmailService.generateRandomCode();
 		
-        EmailService.sendEmail(email);
-		session.setAttribute("randomCode", randomCode);
-		System.out.println(randomCode);
+        String randomCode = EmailService.sendEmail(email);
+		//session.setAttribute("randomCode", randomCode);
+		//System.out.println("랜덤코드"+randomCode);
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("randomCode", randomCode);
 	
-        return "redirect:member/signup_form";
+
+        return map;
     }
 	
 }

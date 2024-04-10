@@ -72,7 +72,14 @@ public class PosterAPIController {
 			
 			String id = ps.getDouble("id")+"";
 			String title = ps.getString("title");
-			String overview = ps.getString("overview");
+			
+
+			String overview = "";
+                        if (!ps.isNull("overview")) { // profile_path가 null이 아닌 경우에만 가져옴
+                            overview = ps.getString("overview");
+                        } else {
+							overview = "";
+                        }
 			String popularity = ps.getDouble("popularity")+"";
 			String poster_path = ps.getString("poster_path");
 			String release_date = ps.getString("release_date");

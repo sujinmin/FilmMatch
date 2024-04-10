@@ -26,6 +26,7 @@
     var mem_grade = "${vo.mem_grade}"; // JSP에서 가져온 회원 등급 정보
     var policy_a = "${vo.policy_a}";
     var policy_b = "${vo.policy_b}";
+    var mem_gender = "${vo.mem_gender}";
 
     // 회원 등급에 따라 선택 옵션 설정
     if (mem_grade === '관리자') {
@@ -47,6 +48,12 @@
         $("#policy_b").val('Y');
     } else if (policy_b === 'N') {
         $("#policy_b").val('N');
+    }
+
+    if (mem_gender === '남자') {
+        $("#mem_gender").val('남자');
+    } else if (mem_gender === '여자') {
+        $("#mem_gender").val('여자');
     } 
 
 
@@ -72,11 +79,13 @@
 	var regular_email = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 	var regula_phone = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
 
- 
+    //var mem_birth = document.getElementById("mem_birth").value;
+
 	function send(f) {
 		//폼에서 입력된값 체크...
 		let mem_name = f.mem_name.value.trim();
 		let mem_pwd = f.mem_pwd.value.trim();
+		let mem_birth = f.mem_birth.value;
 		let mem_email = f.mem_email.value;
 		let mem_phone = f.mem_phone.value;
 		let mem_zipcode = f.mem_zipcode.value;
@@ -95,7 +104,13 @@
 			f.mem_pwd.focus();
 			return;
 		}
-		
+
+        if (mem_birth == "") {
+            alert("생년월일을 선택해주세요.");
+            f.mem_birth.focus();
+            return;
+        }
+
 		if (regular_email.test(mem_email)==false) {
 			alert('이메일을 입력하세요! \n 옳바른 형식으로 입력하세요!')
 			f.mem_email.value='';
@@ -124,8 +139,8 @@
 		}
 
         if (confirm("정말 수정하시겠습니까?")) {
-            f.action = "modify.do";
-            f.submit(); //전송	
+                f.action = "modify.do";
+                f.submit(); //전송	
         }else {
             return false; // 수정 취소 시 전송하지 않음
         }
@@ -165,6 +180,24 @@
                 <td><input class="form-control" type="text" name="mem_pwd" value="${ vo.mem_pwd }"></td>
             </tr>
             <tr>
+                <th><label>생년월일</label></th>
+                <td>
+                    <label>
+                        <input class="form-control" type="date" name="mem_birth" id="mem_birth" required pattern="\d{4}-\d{2}-\d{2}" value="${ vo.mem_birth }" />
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <th><label>성별</label></th>
+                <td>
+                    <select class="form-control" name="mem_gender" id="mem_gender">
+                        <option disabled selected>성별을 선택하세요</option>
+                        <option value="남자">남자</option>
+                        <option value="여자">여자</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <th><label>이메일</label></th>
                 <td><input class="form-control" name="mem_email" value="${ vo.mem_email }"></td>
             </tr>
@@ -172,15 +205,18 @@
                 <th><label>전화번호</label></th>
                 <td><input class="form-control" name="mem_phone" value="${ vo.mem_phone }"></td>
             </tr>
+
             <tr>
-                <th><label>우편번호</label></th>
-                <td><input class="form-control" name="mem_zipcode" id="mem_zipcode" value="${ vo.mem_zipcode }">
-                    <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr();">
+                <th style="vertical-align: middle;">주소</th>
+                <td>
+                    <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
+                        <input class="form-control" name="mem_zipcode" id="mem_zipcode" value="${ vo.mem_zipcode }">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr();">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <input class="form-control"  name="mem_addr"  id="mem_addr" size="50" value="${ vo.mem_addr }">
                 </td>
-            </tr>
-            <tr>
-                <th><label>주소</label></th>
-                <td><input class="form-control"  name="mem_addr"  id="mem_addr" size="50" value="${ vo.mem_addr }"></td>
             </tr>
             <tr>
                 <th> 회원등급 </th>
@@ -195,7 +231,7 @@
                 <th> 필수 이용약관 </th>
                 <td>
                     <select class="form-control" name="policy_a" id="policy_a">
-                        <option value="Y">동의하겠습니다.</option>
+                        <option value="Y">동의하합니다.</option>
                         <option value="N">동의하지 않습니다.</option>
                     </select>
                 </td>
@@ -204,7 +240,7 @@
                 <th> 개인정보 약관 </th>
                 <td>
                     <select class="form-control" name="policy_b" id="policy_b">
-                        <option value="Y">동의하겠습니다.</option>
+                        <option value="Y">동의하합니다.</option>
                         <option value="N">동의하지 않습니다.</option>
                     </select>
                 </td>
@@ -213,7 +249,7 @@
             <tr>
                 <td colspan="2" align="center">
                     <input class="btn btn-primary" type="button" value="회원수정" 
-                            onclick="send(this.form);">
+                            onclick="send(this.form);" >
                     <!-- <input class="btn btn-success" type="button" value="목록보기"
                             onclick="location.href='list.do'" > -->
                 </td>
@@ -221,9 +257,6 @@
         </table>
 
     </div>
-
-                     
-
 </form>
 </body>
 </html>

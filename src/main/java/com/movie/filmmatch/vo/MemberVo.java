@@ -11,6 +11,8 @@ public class MemberVo {
 	String mem_name;
 	String mem_id;
 	String mem_pwd;
+	String mem_birth;
+	String mem_gender;
 	String mem_email;
 	String mem_phone;
 	String mem_zipcode;

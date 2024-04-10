@@ -23,11 +23,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                    values(#{b_idx},#{ b_subject } ,#{ mem_idx },#{ mem_name } , #{ b_content } , now())
     </insert>
 
-	<!-- 글삭제 -->
+	<!-- 문의 글삭제 -->
     <delete id="delete" parameterType="int">
        delete from support where b_idx = #{ b_idx }
     </delete>
 
+	<!-- 문의 글수정 -->
+	<update id="update" parameterType="support">
+    
+       update support set b_subject = #{ b_subject },
+                      b_content = #{ b_content },
+                      b_ip = #{ b_ip },
+                      b_regdate=now()
+     where b_idx = #{ b_idx } 
+	 </update>       
 
 </mapper>
 

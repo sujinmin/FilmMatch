@@ -63,8 +63,9 @@
 			f.b_content.focus();
 			return;
 		}
-		alert('문의 하시겠습니까?');
-		f.action ="insert.do"; // /board/insert.do -> BoardController
+
+		if (confirm("정말 수정하시겠습니까?")==false)return;
+        f.action = "modify.do";
 		f.submit();
     }
 
@@ -79,51 +80,88 @@
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp"/>
 
 <section id="one">
-    <form class="form-inline">
-        <div id="box">
-            <div class="panel panel-primary">
-            <div class="panel-heading"><h4>1:1문의하기</h4></div>
-            <div class="panel-body">
-                <table class="table">
-                   
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+
+                <h2>고객센터</h2>
+                <p></p>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="home.do">고객센터홈</a></li>
+
+                    <li><a href="notice.do">공지사항</a></li>
+
+                    <li><a href="faq.do">자주찾는질문</a></li>
+
+                    <li class="active"><a href="qna.do">1:1문의</a></li>
+
+                    <li><a href="reviewer.do">평론가</a></li>
+                </ul>
+                <hr class="hidden-sm hidden-md hidden-lg">
+            </div>
+
+            <div class="col-sm-8">
+                <h1>게시물 수정하기</h1>
+
+            </div>
+            <br>
+            <br>
+
+
                     
+                    <br>
+                    <br>
+
+                    
+            <div class="col-sm-8">
+            <form class="table-wrapper"> <!--  action="form-inline" -->
+                <input type="hidden"  name="mem_idx"   value="${ user.mem_idx }">
+                <input type="hidden"  name="b_idx"  value="${ vo.b_idx }">
+                <input type="hidden"  name="mem_name"  value="${ user.mem_name }">
+                <table class="table-wrapper">
+                    <tr>
+                        <th colspan="2">
+                            <b>${ vo.mem_name }</b>님의 문의
+                        </th>
+                    </tr>
                     <tr>
                         <th>제목</th>
-                        <td><input class="form-control" name="b_subject" style="width: 100%;"></td>
-                    </tr>
-
-                    <tr>
-                        <th>작성자</th>
-                        <td><input class="form-control" name="mem_name" style="width: 100%;"></td>
-                    </tr>
-                    
-                    <tr>
+                        <td><input class="query" type="text" name="b_subject" value="${ vo.b_subject }"></td>
+                     </tr>
+                     <tr>
                         <th>내용</th>
-                        <td><textarea class="form-control" rows="5" name="b_content"></textarea></td>
-                    </tr>
-
+                        <td><textarea class="message" rows="5" name="b_content" >${ vo.b_content }</textarea></td>
+                     </tr>
                     
 
-                    
                     <tr>
                         <td colspan="2" align="center">
-                            <input type="button" class="btn btn-primary" value="문의하기" 
-                                    onclick="send(this.form);">
-                            <input type="button" class="btn btn-success" value="목록보기" 
-                            onclick="location.href='qna.do'">
-                            <input type="button" class="btn btn-danger"  value="삭제"
-                                    onclick="del(this.form);">       
+
+                            
+                            <input type="button" class="button special" value="수정하기"
+                                    onclick="send(this.form);">&nbsp;
+                             
+                            <input type="button" class="button" value="목록보기"
+                                   onclick="location.href='qna.do'">
                         </td>
                     </tr>
                 </table>
+            </form>
             </div>
-         </div>
-        </div>
-       </form>
 
+
+            
+
+
+
+            
+            
+        </div><!-- <div class="row"> -->
+    </div><!-- <div class="contanor"> -->
 
 
 </section>
-<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/footer.jsp"/>
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/footer.jsp" />
 </body>
+
 </html>

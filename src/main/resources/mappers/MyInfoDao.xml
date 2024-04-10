@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.filmmatch.dao.MyInfoDao">
+
+<!-- 주소목록 전체조회 -->
+<select id="selectList" parameterType="int" resultType="myinfo">
+select 
+ rank() over(order by addr_idx desc) as no
+		, mem_idx
+		, zipcode
+		, addr_street
+		, addr_detail
+
+from moviedb.address
+where mem_idx=#{ mem_idx };
+</select>
+
+<!-- 주소 하나 조회 -->
+<!-- <select id="selectOne" parameterType="int" resultType="myinfo">
+select * from address
+	where mem_idx=#{ mem_idx }
+	order by addr_idx
+</select> -->
+<!-- 주소 하나 조회 -->
+<select id="selectOneAddr" parameterType="int" resultType="myinfo">
+select * from address
+	where addr_idx=#{ addr_idx }
+	order by addr_idx
+</select>
+
+<!-- insert -->
+<insert id="insert" parameterType="myinfo">
+insert into address (	zipcode,
+						addr_street,
+						addr_detail) 
+			values	(	#{ zipcode },
+						#{ addr_street },
+						#{ addr_detail }) 
+</insert>
+	
+<!-- update -->
+<update id="update" parameterType="myinfo">
+update address set 	zipcode=#{zipcode},
+					addr_street=#{addr_street},
+					addr_detail=#{addr_detail}
+		where addr_idx=#{addr_idx}
+</update>
+
+<!-- delete -->
+<delete id="delete" parameterType="int">	
+	delete from address  where addr_idx =#{ addr_idx }
+</delete>
+
+	
+
+
+
+	
+</mapper>

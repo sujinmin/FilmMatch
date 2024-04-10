@@ -18,6 +18,6 @@ public interface SupportDao {
 
 	public int delete(int b_idx);
 
-	// public int update(SupportVo vo);
+	public int update(SupportVo vo);
 
 }

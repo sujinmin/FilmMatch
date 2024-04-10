@@ -58,6 +58,10 @@
             }
         });
     }
+    function addr(){
+
+        
+    }
 
     function del(mem_idx) { //삭제처리
             
@@ -110,15 +114,6 @@
                 <div class="card-body">
                     <table id="datatablesSimple">
                         <thead>
-                            <!-- 컬럼 -->
-                            <!-- <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
-                            </tr> -->
 
                             <tr>
                                 <!-- 서치 바 -->
@@ -153,7 +148,9 @@
                                                     <!-- onclick="location.href='admin_modify.do?mem_idx=${ vo.mem_idx }'" -->
                                         <input class="btn btn-info" type="button"  value="보기"
                                                 onclick="view('${vo.mem_idx}');" >
-                                        <input class="btn btn-danger"  type="button"  value="삭제" onclick="del('${vo.mem_idx}');">
+                                        <input class="btn btn-primary" type="button"  value="주소보기"
+                                                onclick="addr('${vo.mem_idx}');" >
+                                                <input class="btn btn-danger"  type="button"  value="삭제" onclick="del('${vo.mem_idx}');">
                                     </td>
                                     </tr>
                                 </c:forEach>
@@ -161,6 +158,20 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <!-- 회원주소목록 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-area me-1"></i>
+                   회원별 주소목록
+                </div>
+                <div class="card-body">
+                    <!-- <canvas id="myAreaChart" width="100%" height="30"></canvas> -->
+
+
+
+                </div>
+                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
 
 

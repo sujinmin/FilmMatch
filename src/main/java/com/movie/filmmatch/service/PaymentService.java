@@ -41,4 +41,11 @@ public interface PaymentService {
      * @return
      */
     public List<PaymentVo> payment_select_orderid(String orderId);
+
+    /**
+     * 결제상세 금액
+     * @param orderId
+     * @return
+     */
+    public PaymentVo payment_select_orderid_amount(String orderId);
 }

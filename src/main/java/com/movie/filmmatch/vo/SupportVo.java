@@ -31,6 +31,18 @@ public class SupportVo {
     public SupportVo() {
     }
 
+    /**
+     * 문의하기(새글쓰기)에 대한 포장
+     * 
+     * @param b_idx
+     * @param b_subject
+     * @param b_content
+     * @param b_ip
+     * @param mem_idx
+     * @param mem_name
+     * @param b_ref
+     * @param community_page
+     */
     public SupportVo(int b_idx, String b_subject, String b_content, String b_ip, int mem_idx, String mem_name,
             int b_ref, int community_page) {
         this.b_idx = b_idx;
@@ -41,6 +53,49 @@ public class SupportVo {
         this.mem_name = mem_name;
         this.b_ref = b_ref;
         this.community_page = community_page;
+    }
+
+    /**
+     * 답글쓰기(communuty_page)의 포장
+     * 
+     * @param b_idx
+     * @param b_subject
+     * @param b_content
+     * @param b_ip
+     * @param mem_idx
+     * @param mem_name
+     * @param b_ref
+     * @param b_step
+     * @param b_depth
+     * @param community_page
+     */
+    public SupportVo(int b_idx, String b_subject, String b_content, String b_ip, int mem_idx, String mem_name,
+            int b_ref, int b_step, int b_depth, int community_page) {
+        this.b_idx = b_idx;
+        this.b_subject = b_subject;
+        this.b_content = b_content;
+        this.b_ip = b_ip;
+        this.mem_idx = mem_idx;
+        this.mem_name = mem_name;
+        this.b_ref = b_ref;
+        this.b_step = b_step;
+        this.b_depth = b_depth;
+        this.community_page = community_page;
+    }
+
+    /**
+     * support_qna_modifyform 수정폼
+     * 
+     * @param b_idx
+     * @param b_subject
+     * @param b_content
+     * @param b_ip
+     */
+    public SupportVo(int b_idx, String b_subject, String b_content, String b_ip) {
+        this.b_idx = b_idx;
+        this.b_subject = b_subject;
+        this.b_content = b_content;
+        this.b_ip = b_ip;
     }
 
 }

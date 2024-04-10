@@ -46,13 +46,24 @@
                 <td>${ vo.mem_pwd }</td>
             </tr>
             <tr>
+                <th><label>생년월일</label></th>
+                <td>${ vo.mem_birth }</td>
+            </tr>
+            <tr>
+                <th><label>성별</label></th>
+                <td>${ vo.mem_gender }</td>
+            </tr>
+            <tr>
                 <th><label>아이피</label></th>
                 <td>${ vo.mem_ip }</td>
             </tr>
             <tr>
-                <th><label>가입일자/갱신일자</label></th>
-                <td>${ vo.mem_regdate }/<br>
-                    ${ vo.mem_modifydate }</td>
+                <th><label>가입일자</label></th>
+                <td>${ vo.mem_regdate }</td>
+            </tr>
+            <tr>
+                <th><label>갱신일자</label></th>
+                <td>${ vo.mem_modifydate }</td>
             </tr>
             <tr>
                 <th><label>비밀번호</label></th>
@@ -74,7 +85,9 @@
             </tr>
             <tr>
                 <th><label>주소</label></th>
-                <td>${ vo.mem_addr }</td>
+                <td>
+                   ${ vo.mem_addr }
+                </td>
             </tr>
             <tr>
                 <th> 회원등급 </th>

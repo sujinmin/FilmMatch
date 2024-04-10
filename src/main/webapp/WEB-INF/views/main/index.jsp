@@ -92,12 +92,16 @@
 <div id="boxb">
 		<ul>
 		<c:forEach  var="poster" items="${posterlist}" varStatus="i">
-		<li style="font-size:50px;   color:white;">${i.count}</li>
-		<li><img src="https://image.tmdb.org/t/p/w185/${poster.poster_path}" onclick="movie_info();"class="hand-cursor"/></li>
+	 	<c:if test="${not empty poster.overview}">
+		<li style="font-size:50px; color:white;">${i.count}</li>
+		<li><img src="https://image.tmdb.org/t/p/w185/${poster.poster_path}" onclick="movie_info('${poster.id}')"class="hand-cursor"/></li>
+		</c:if>
 		</c:forEach>
 		<c:forEach  var="poster" items="${posterlist}" varStatus="i">
+		<c:if test="${not empty poster.overview}">
 		<li style="font-size:50px; color:white;">${i.count}</li>
-		<li><img src="https://image.tmdb.org/t/p/w185/${poster.poster_path}" onclick="movie_info();"class="hand-cursor"/></li>
+		<li><img src="https://image.tmdb.org/t/p/w185/${poster.poster_path}" onclick="movie_info('${poster.id}')"class="hand-cursor"/></li>
+		</c:if>
 		</c:forEach>
 		</ul>
 	</div>
@@ -117,12 +121,16 @@
 <div id="boxf">
 <ul>
 		<c:forEach  var="vote" items="${votelist}" varStatus="i">
+		<c:if test="${not empty vote.overview}">
 		<li style="font-size:50px; color:white;">${i.count}</li>
-		<li><img src="https://image.tmdb.org/t/p/w185/${vote.poster_path}" onclick="movie_info();" class="hand-cursor" /></li>
+		<li><img src="https://image.tmdb.org/t/p/w185/${vote.poster_path}" onclick="movie_info('${vote.id}')" class="hand-cursor" /></li>
+		</c:if>
 		</c:forEach>
 		<c:forEach  var="vote" items="${votelist}" varStatus="i">
+		<c:if test="${not empty vote.overview}">
 		<li style="font-size:50px; color:white;">${i.count}</li>
-		<li><img src="https://image.tmdb.org/t/p/w185/${vote.poster_path}" onclick="movie_info();" class="hand-cursor"/></li>
+		<li><img src="https://image.tmdb.org/t/p/w185/${vote.poster_path}" onclick="movie_info('${vote.id}')" class="hand-cursor"/></li>
+		</c:if>
 		</c:forEach>
 		</ul>
 </div>

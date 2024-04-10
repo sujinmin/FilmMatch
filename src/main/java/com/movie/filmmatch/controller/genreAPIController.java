@@ -38,7 +38,7 @@ public static List<PlayingVo> search_playing() throws Exception {
     String character = "";
     String known_for_department = "";
 
-    for (int page = 1; page <= 3; page++) {
+    for (int page = 1; page <= 5; page++) {
         String urlStr = "https://api.themoviedb.org/3/movie/now_playing?language=ko&page=" + page;
         URL url = new URL(urlStr);
         HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
@@ -111,6 +111,7 @@ public static List<PlayingVo> search_playing() throws Exception {
                     
                 }
 
+
                 String title = movie.getString("title");
                 String overview = movie.getString("overview");
                 String poster_path = movie.getString("poster_path");
@@ -125,7 +126,7 @@ public static List<PlayingVo> search_playing() throws Exception {
                     genre_list.add(genreId);
                 }
 
-                PlayingVo vo = new PlayingVo(clientId, title, overview, poster_path, release_date, popularity, vote_count, id, genre_list, cradite_list);
+                PlayingVo vo = new PlayingVo(id, title, overview, poster_path, release_date, popularity, vote_count, id, genre_list, cradite_list);
 
                 playing_list.add(vo);
             }

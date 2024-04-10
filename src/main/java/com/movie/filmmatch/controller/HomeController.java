@@ -9,9 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.movie.filmmatch.dao.MemberDao;
 import com.movie.filmmatch.service.GoodsService;
+import com.movie.filmmatch.util.IdAPIUtils;
 import com.movie.filmmatch.util.MyKakaoUtils;
+import com.movie.filmmatch.vo.ActorVo;
+import com.movie.filmmatch.vo.DetailMovieTVVo;
 import com.movie.filmmatch.vo.GoodsVo;
+import com.movie.filmmatch.vo.NationVo;
 import com.movie.filmmatch.vo.NewsVo;
 import com.movie.filmmatch.vo.PlayingVo;
 import com.movie.filmmatch.vo.PosterVo;
@@ -20,18 +25,29 @@ import com.movie.filmmatch.vo.VedioVo;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class HomeController{
 
  	@Autowired
     GoodsService goods_service;
+	    
+	@Autowired
+	MemberDao member_dao;
 
     @Autowired
     ServletContext application;
 
-	 @Autowired
+	@Autowired
     HttpServletRequest request;
+
+	@Autowired
+    HttpServletResponse response;
+
+	@Autowired
+	HttpSession session;
 	
 	
 	public HomeController() {
@@ -122,17 +138,6 @@ public class HomeController{
 
 
 	/**
-	 * 마이페이지
-	 * @return
-	 */
-	@RequestMapping("/mypage_form.do")
-	public String mypage() {
-
-		return "member/mypage_form";
-
-	}
-
-	/**
 	 * 관리자 페이지
 	 * @return
 	 */
@@ -153,7 +158,7 @@ public class HomeController{
 		List<PlayingVo> list = null;
 		try {
 			list = genreAPIController.search_playing();
-			System.out.println(list);
+			
 	
 		} catch (Exception e) {
 			
@@ -172,8 +177,41 @@ public class HomeController{
 	 * @return
 	 */
 	@RequestMapping("/actor.do")
-	public String actor() {
+	public String actor(Model model) {
 
+		List<ActorVo> list = null;
+		try {
+			list = ActorAPIController.search_actor();
+			
+	
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+
+		List<ActorVo> list1 = null;
+		try {
+			list1 = Actor1APIController.search_actorameri();
+			
+	
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+
+		List<ActorVo> list2 = null;
+		try {
+			list2 = Actor2APIController.search_actorjapan();
+		
+	
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		model.addAttribute("list2", list2);
+		model.addAttribute("list1", list1);
+		model.addAttribute("list", list);
+	
 		return "main/actor";
 
 	}
@@ -183,7 +221,17 @@ public class HomeController{
 	 * @return
 	 */
 	@RequestMapping("/nation.do")
-	public String nation() {
+	public String nation(Model model) {
+
+		List<NationVo> list = null;
+		try {
+			list = NationAPIController.search_nation();
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		model.addAttribute("list", list);
 
 		return "main/nation";
 
@@ -228,69 +276,27 @@ public class HomeController{
 
 	}
 
+		/**
+	 * 영화 상세 페이지
+	 * @return
+	 */
 	@RequestMapping("/movieinfo.do")
-	public String movieinfo(Model model) {
+	public String movieinfo(String id,String media_type,Model model) {
 
-		List<NewsVo> list = null;
+
+
+		List<DetailMovieTVVo> list = null;
 		try {
-			list =NewsAPIController.search_news();
-		
-
-		} catch (Exception e) {
 			
+			list = IdAPIUtils.search_id(id,media_type);
+			
+		} catch (Exception e) {		
 			e.printStackTrace();
 		}
 
-		List<PosterVo> posterlist = null;
-		try {
-			posterlist =PosterAPIController.search_poster();
-			
-
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
-
-		List<PosterVo> votelist = null;
-		try {
-			votelist = PosterAPIController.search_vote();
-			
-
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
-
-		List<VedioVo> vediolist = null;
-		try {
-			vediolist =  VedioAPIController.search_vedio();
-			
-
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
-
-
-		Map<String, List<GoodsVo>> map = null;
-		try {
-			map = goods_service.select_list();
-		
-
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
-
-        model.addAttribute("map", map);
-		model.addAttribute("vediolist", vediolist);
-		model.addAttribute("votelist", votelist);
-		model.addAttribute("posterlist", posterlist);
-		model.addAttribute("newslist", list);
-
+		model.addAttribute("list", list);
 		return "main/movieinfo";
 
 	}
-
 
 }

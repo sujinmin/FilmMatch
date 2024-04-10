@@ -110,7 +110,7 @@
                         <div id="main " style="text-align: center;">
                             <div class="policy_box">
                                 <!-- 4u 12u$(xsmall) -->
-                                <input type="radio" id="a_y" name="policy_a" value="Y" checked><label for="a_y">동의하겠습니다.</label>
+                                <input type="radio" id="a_y" name="policy_a" value="Y" checked><label for="a_y">동의합니다.</label>
                             
                                 <input type="radio" id="a_n" name="policy_a" value="N"><label for="a_n">동의하지않습니다.</label>
                             </div>
@@ -169,7 +169,7 @@
                         <div id="main " style="text-align: center;">
                             <div class="policy_box">
                                 <!-- 4u 12u$(xsmall) -->
-                                <input type="radio" id="b_y" name="policy_b" value="Y" checked><label for="b_y">동의하겠습니다.</label>
+                                <input type="radio" id="b_y" name="policy_b" value="Y" checked><label for="b_y">동의합니다.</label>
                             
                                 <input type="radio" id="b_n" name="policy_b" value="N"><label for="b_n">동의하지않습니다.</label>
                             </div>

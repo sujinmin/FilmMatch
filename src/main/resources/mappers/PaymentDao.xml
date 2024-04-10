@@ -71,6 +71,24 @@ select * from payment where mem_idx=#{mem_idx} order by approvedAt desc
 <select id="payment_select_orderid"  parameterType="String" resultType="payment">
 select * from payment where orderId=#{orderId}
 </select>
+
+
+<!-- 결제상세 금액조회 -->
+<select id="payment_select_orderid_amount" parameterType="String" resultType="payment">
+
+    SELECT 
+        orderId,
+        SUM(goods_price) AS goods_price,
+        SUM(goods_rate_price) AS goods_rate_price,
+        SUM(goods_count_rate_price) AS goods_count_rate_price,
+        SUM(goods_count_price) AS goods_count_price,
+        totalAmount
+    FROM payment  
+    WHERE orderId=#{orderId}
+    GROUP BY orderId, totalAmount
+
+</select>
+
 </mapper>
 
 

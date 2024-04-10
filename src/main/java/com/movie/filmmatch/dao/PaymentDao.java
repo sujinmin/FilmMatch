@@ -19,5 +19,7 @@ public interface PaymentDao {
     /**결제 상세내역 */
     List<PaymentVo> payment_select_orderid(String orderId);
 
+    PaymentVo payment_select_orderid_amount(String orderId);
+
 
 }

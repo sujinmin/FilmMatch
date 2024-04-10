@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.tomcat.util.json.JSONParser;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -223,7 +223,9 @@ public class PaymentController {
         }
 
         List<PaymentVo> list=payment_service.payment_select_orderid(orderId);
+        PaymentVo totalAmount=payment_service.payment_select_orderid_amount(orderId);
         model.addAttribute("list", list);
+        model.addAttribute("totalAmount", totalAmount);
 
 
 

@@ -120,11 +120,12 @@
                         <th>제목</th>
                         <td><input class="form-control" name="b_subject" style="width: 100%;"></td>
                     </tr> 
-                    
+                    <tr>
 
                         <th>내용</th>
                         <td><textarea class="form-control" rows="5" name="b_content"></textarea></td>
                     </tr>
+                    
                     <tr>
                         <td colspan="2" align="center">
                             <input type="button" class="btn btn-primary" value="문의하기" 

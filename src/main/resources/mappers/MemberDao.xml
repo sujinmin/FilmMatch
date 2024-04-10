@@ -25,6 +25,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into member(mem_name,
 							mem_id,
 							mem_pwd,
+							mem_birth,
+							mem_gender,
 							mem_email,
 							mem_phone,
 							mem_zipcode,
@@ -35,6 +37,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(#{ mem_name },
 				#{ mem_id },
 				#{ mem_pwd },
+				#{ mem_birth },
+				#{ mem_gender },
 				#{ mem_email },
 				#{ mem_phone },
 				#{ mem_zipcode },
@@ -51,9 +55,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- update -->
 	<update id="update" parameterType="member">
-		update member set mem_pwd=#{mem_pwd},mem_email=#{mem_email},mem_phone=#{mem_phone},mem_zipcode=#{mem_zipcode},mem_addr=#{mem_addr},
-						mem_grade=#{mem_grade},mem_ip=#{mem_ip},mem_modifydate=now(), policy_a=#{ policy_a },policy_b=#{ policy_b }
-					
+		update member set 	mem_name=#{mem_name},
+							mem_pwd=#{mem_pwd},
+							mem_birth=#{mem_birth},
+							mem_gender=#{mem_gender},
+							mem_email=#{mem_email},
+							mem_phone=#{mem_phone},
+							mem_zipcode=#{mem_zipcode},
+							mem_addr=#{mem_addr},
+							mem_grade=#{mem_grade},
+							mem_ip=#{mem_ip},
+							mem_modifydate=now(),
+							policy_a=#{ policy_a },policy_b=#{ policy_b }
+						
 					 where mem_idx=#{mem_idx}
 	</update>
 	

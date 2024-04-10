@@ -40,6 +40,16 @@
 var imageFilenames;
 
 $(document).ready(function() {
+
+	// 페이지 로드 시 총 구매 금액 계산
+        calculateTotal();
+
+        // 상품 수량 변경 시 총 구매 금액 계산
+        $("#product_count").on("change", function() {
+            calculateTotal();
+        });
+
+
     // 상품을 삭제할 경우를 대비하여, 삭제될 예정인 파일명 데이터 배열로 저장
     function extractImageFilenames() {
         var imageElements = document.querySelectorAll('.div3 img');
@@ -51,6 +61,8 @@ $(document).ready(function() {
     }
 
     extractImageFilenames();
+
+	adjustDiv3Position();
 });
 
 /**
@@ -79,24 +91,11 @@ function delete_goods(goods_idx, image_url) {
 상품 수정
 */
 function update_goods(goods_idx){
-//----sweet------------------------------------------------------------
-			Swal.fire({
-				  title: "해당 상품을  수정하시겠습니까?",
-				  icon: "warning",
-				  showCancelButton: true,
-				  confirmButtonColor: "#3085d6",
-				  cancelButtonColor: "#d33",
-				  confirmButtonText: "확인",
-				  cancelButtonText:"취소"
-				}).then((result) => {
-					
-					
-				  if (result.isConfirmed) {
+
+		 if (confirm("해당 상품을 수정하시겠습니까?") == true) {
 					  location.href="update_form.do?goods_idx="+goods_idx;
-				  }
-				  
-				});
-//----sweet-----------------------------------------------------------
+		}
+
 }
 
 
@@ -120,15 +119,17 @@ function add_cart(){
 	    	   return;
 	       }
 	      
-	       
-	     
-	       
+	      if ($("#optionSelect").val() === "none") {
+  		  alert("상품옵션을 선택하세요!");
+    	  return;
+		  }
+
 	   
 	       //Ajax처리(장바구니 등록)
 	       $.ajax({
 	    	   
 	    	   url			:"${ pageContext.request.contextPath }/cart/cart_insert.do",  // CartInsertAction  : cart_insert.do?p_idx=5&mem_idx=1 
-	    	   data		:	{"goods_idx":"${ vo.goods_idx }" ,"product_count":"1"  },
+	    	   data		:	{"goods_idx":"${ vo.goods_idx }" , "product_count": $("#product_count").val() },
 	    	   dataType	:	"json",
 	    	   success	:	function(res_data){
 	    		   
@@ -155,6 +156,41 @@ function add_cart(){
 	       
 	       
 	  }
+
+// 동적으로 생성된 내용에 따라 div3의 위치를 조정하는 함수
+function adjustDiv3Position() {
+    var dynamicContent = document.getElementById("dynamicContent");
+    var dynamicContentTop = dynamicContent.offsetTop; // 동적 콘텐츠의 상단 위치
+    var dynamicContentHeight = dynamicContent.offsetHeight; // 동적 콘텐츠의 높이
+    var div2Height = document.querySelector(".div2").offsetHeight; // div2의 높이
+
+    // div3의 위치를 동적으로 조정
+    var div3 = document.querySelector(".div3");
+    div3.style.top = (dynamicContentTop + dynamicContentHeight + div2Height) + "px";
+}
+
+
+	  function updateQuantity() {
+
+		     
+            var optionSelect = document.getElementById("optionSelect");
+            var quantitySection = document.getElementById("quantitySection");
+            var quantityInput = document.getElementById("quantityInput");
+
+            if (optionSelect.value !== "none") {
+                quantitySection.style.display = "block";
+            } else {
+                quantitySection.style.display = "none";
+            }
+        }
+
+
+		 function calculateTotal() {
+        var productCount = parseInt($("#product_count").val());
+        var unitPrice = ${vo.goods_rate_price}; // 상품의 단가, 여기서는 임의로 1000원으로 설정했습니다.
+        var totalPrice = productCount * unitPrice; // 총 구매 금액 계산
+        $("#total_price").text(totalPrice.toLocaleString()); // 총 구매 금액을 화면에 업데이트
+    }
 </script>
 <body>
 
@@ -173,24 +209,59 @@ function add_cart(){
 			<a onclick="delete_goods(${vo.goods_idx},'${vo.image_url}');" class="button  small">상품 삭제</a>
 			<a onclick="update_goods(${vo.goods_idx});" class="button  small">상품 수정</a>
 			</c:if>
+			<br>
+			<br>
+	
 			</div>
 			<div class="div2">
 			<h2>${vo.goods_name}</h2>
-			<h3>판매가    &nbsp; &nbsp;&nbsp;    &nbsp;&nbsp;  <fmt:formatNumber value="${vo.goods_price}"></fmt:formatNumber></h3>
-			 &nbsp; &nbsp; &nbsp; &nbsp;상품 리뷰 수     &nbsp;&nbsp;&nbsp;&nbsp;  ${vo.goods_reviews}<br>
-			&nbsp; &nbsp; &nbsp; &nbsp;배송방법   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  택배<br>
+			<h3>판매가    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp; &nbsp;   &nbsp;&nbsp;  <fmt:formatNumber value="${vo.goods_rate_price}"></fmt:formatNumber>원 <span style="    text-decoration: line-through; font-size: smaller; color: grey;">
+        		<fmt:formatNumber value="${vo.goods_price}"></fmt:formatNumber>원
+    		</span></h3>
+			 &nbsp; &nbsp; &nbsp; &nbsp;상품 리뷰 수     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;  ${vo.goods_reviews}<br>
+			&nbsp; &nbsp; &nbsp; &nbsp;배송방법   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    택배<br>
 			&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;배송비   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-			<c:if test="${vo.goods_price < 30000}"> <fmt:formatNumber value="3000"></fmt:formatNumber>(30,000 이상 구매 시 무료)</c:if>
-			<c:if test="${vo.goods_price >= 30000}"> <fmt:formatNumber value="0"></fmt:formatNumber>(30,000 이상 구매 시 무료)</c:if>
+			&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; <c:if test="${vo.goods_price < 30000}"> <fmt:formatNumber value="3000"></fmt:formatNumber>(30,000 이상 구매 시 무료)</c:if> 
+			<c:if test="${vo.goods_price >= 30000}"> <fmt:formatNumber value="0"></fmt:formatNumber>(30,000 이상 구매 시 무료)</c:if> 
+			<br>
+
+			 &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;상품 옵션 선택&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+   				 <select id="optionSelect" onchange="updateQuantity()" >
+      				  <option value="none">옵션선택</option>
+       				 <option value="${vo.goods_name}">${vo.goods_name}</option>
+   				 </select>
+	   					 <div id="quantitySection" style="display: none;">
+        			<h3>수량 선택</h3>
+    		  <table>
+   		 <tr>
+        		<td>수량:</td>
+        		<td><input type="number" id="product_count" min="1" value="1"></td>
+        		<td> <a href="#" onclick="add_cart()" class="button small">장바구니 담기</a> </td>
+   				 </tr>
+    <tr>
+        <td colspan="3" style="text-align:right;">
+            <p>총 구매금액: <span id="total_price"></span>원</p>
+        </td>
+    </tr>
+</table>
+    </div>
+			<br>
+			<br>
+			<br>
+	
+			&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
 			<br>
 			<br>
 			<br>
 			<br>
 			<br>
 			<br>
-			&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="#" class="button  small">바로 구매하기</a> &nbsp;&nbsp; <a href="#" onclick="add_cart()" class="button alt small">장바구니 담기</a> &nbsp;&nbsp;<a href="#" class="button alt small">관심상품등록</a>
+			<br>
+			<br>
+			<br>
+			<br>
 			</div>
-			<div class="div3">${vo.goods_contents}</div>
+			<div class="div3">${vo.goods_contents} </div>
 			<div class="div4">
 <b>상품결제정보</b><br>
 고액결제의 경우 안전을 위해 카드사에서 확인전화를 드릴 수도 있습니다. 확인과정에서 도난 카드의 사용이나 타인 명의의 주문등 정상적인 주문이 아니라고 판단될 경우 임의로 주문을 보류 또는 취소할 수 있습니다.<br><br>

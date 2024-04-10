@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.movie.filmmatch.dao.MemberDao;
 import com.movie.filmmatch.dao.SupportDao;
@@ -94,7 +95,7 @@ public class SupportController {
 		String b_ip = request.getRemoteAddr();
 		vo.setB_ip(b_ip);
 
-		int res = support_dao.insert(vo);
+		support_dao.insert(vo);
 
 		return "redirect:qna.do";
 
@@ -127,13 +128,56 @@ public class SupportController {
 		SupportVo vo = support_dao.selectOne(b_idx);
 
 		// content => <br> -> \n
-		String content = vo.getB_content().replaceAll("<br>", "\n");
-		vo.setB_content(content);
+		String b_content = vo.getB_content().replaceAll("<br>", "\n");
+		vo.setB_content(b_content);
 
 		// request binding
 		model.addAttribute("vo", vo);
 
 		return "support/support_qna_view";
 	}
+
+	// 수정폼
+	@RequestMapping("modify_form.do")
+	public String modify_form(int b_idx, Model model) {
+
+		// idx해당되는 게시물 1건 얻어오기
+		SupportVo vo = support_dao.selectOne(b_idx);
+
+		// content => <br> -> \n
+		String b_content = vo.getB_content().replaceAll("<br>", "\n");
+		vo.setB_content(b_content);
+
+		// request binding
+		model.addAttribute("vo", vo);
+
+		return "support/support_qna_modifyform";
+
+	}// end:modify_form
+
+	// 수정
+	// /visit/modify.do?idx=5&name=홍길동&content=잘들어가나&pwd=1234
+	@RequestMapping("modify.do")
+	public String modify(SupportVo vo, Model model) {
+
+		// \r\n -> <br>변경
+		String b_content = vo.getB_content().replaceAll("\n", "<br>");
+		vo.setB_content(b_content);
+
+		// 3.IP구하기
+		String b_ip = request.getRemoteAddr();
+		vo.setB_ip(b_ip);
+
+		// 5.DB update
+		support_dao.update(vo);
+
+		model.addAttribute("vo", vo);
+
+		// 반환정보->DS에게 전달
+		// -> 접두어 redirect이면 그이후 명령(qna.do)으로
+		// sendRedirect("qna.do") 시킨다
+		return "redirect:qna.do";
+
+	}// end: modify
 
 }

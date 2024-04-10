@@ -95,16 +95,24 @@
 
 					}//end:insert_form()
 
-					function del(){
+					function del(b_idx){
 	  
 	  				  //alert(b_idx +" 삭제");
 	  
 	  				  if(confirm("정말 삭제하시겠습니까?")==false) return;
 	  
 	  				  //삭제
-	                  location.href="delete.do?b_idx=" + b_idx; //PhotoDeleteAction
+	                  location.href="delete.do?b_idx="+ b_idx
 	  
                     }//end:del()
+
+					function modify_form(b_idx) {
+		
+				console.log(b_idx);
+				location.href="modify_form.do?b_idx=" + b_idx; //수정 폼 페이지
+
+	}//end : modify_form	
+				
 
 				</script>
 			</head>
@@ -176,19 +184,12 @@
 						<tr>
 							<td colspan="2" align="center">
 
-								<c:if test="${ user.mem_grade eq '관리자' }">
-									<input class="btn btn-link" type="button" value="답글달기"
-										onclick="location.href='reply_form.do?b_idx=${ vo.b_idx }&page=${ param.page }&'">&nbsp;
-								</c:if>
-								<!-- 글주인 or 관리자만 활성화 -->
-								<c:if
-									test="${ (vo.mem_idx eq user.mem_idx) or (user.mem_grade eq '관리자') }">
-									<!-- request:vo | session:user -->
-									<input type="button" class="button special" value="수정하기"
-										onclick="modify_form();">&nbsp;
-									<input class="button alt" type="button" value="삭제하기"
-										onclick="del();">&nbsp;
-								</c:if>
+								
+								<input type="button" class="button special" value="수정하기"
+										onclick="modify_form('${vo.b_idx}');">&nbsp;
+								<input class="button alt" type="button" value="삭제하기"
+										onclick="del('${ vo.b_idx }');">&nbsp;
+								
 								<input type="button" class="button" value="목록보기"
 									onclick="location.href='qna.do'">
 							</td>
@@ -212,4 +213,4 @@
 	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/footer.jsp" />
 </body>
 
-			</html>
+</html>

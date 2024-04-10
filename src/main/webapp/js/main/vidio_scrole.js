@@ -59,9 +59,9 @@ $("#im2").html(`제목: ${name}`);
 }
 
 
-function movie_info(){
-	// location.href = "delete.do?idx=" +f.idx.value;
-	location.href = "movieinfo.do";
+function movie_info(id,media_type) {
+    var url = "movieinfo.do?id=" + id +"&media_type=" + media_type;
+    window.location.href = url;
 }
 
 

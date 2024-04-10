@@ -60,6 +60,17 @@ public class PaymentServiceImpl implements PaymentService {
       return list;
     }
 
+    /**
+     * 결제상세 총 금액
+     */
+      @Override
+      public PaymentVo payment_select_orderid_amount(String orderId) {
+      
+      PaymentVo vo=payment_dao.payment_select_orderid_amount(orderId);
+
+      return vo;
+      }
+
 
 
 }
