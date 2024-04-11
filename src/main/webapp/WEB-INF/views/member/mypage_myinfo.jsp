@@ -145,6 +145,19 @@
         }
 	}
 
+    function deleteAddress(addrIdx) {
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            location.href = 'addr_delete.do?addr_idx=' + addrIdx;
+        }
+    }
+
+   
+    function deleteAddress(addrIdx,No) {
+        
+        if (confirm( No + "번 주소를 삭제하시겠습니까?")) {
+            location.href = 'addr_delete.do?addr_idx=' + addrIdx;
+        }
+    }
  </script>
 </head>
 <body>
@@ -268,8 +281,10 @@
 
         <form>
             <table>
+                <input type="button" id="" value="주소추가" onclick="location.href='address_insert.do'">
                 <tr>
                     <th colspan="5"><b>${vo.mem_name}</b>주소목록</th>
+                    
                 </tr>
                 
                 
@@ -280,15 +295,18 @@
                     <th>상세주소</th>
                     <th>편집</th>
                 </tr>
-                <c:forEach items="${ list }" var="vo">
+                <c:forEach items="${ list }" var="list">
                     <tr>
-                        <td>${list.no}</td> <!-- 번호를 순서대로 표시 -->
+                        <!-- <td>${list.no}</td> -->
+                        <td>${list.no}
+                            <input type="hidden" id="addr_idx" value="${ list.addr_idx}">
+                        </td> <!-- 번호를 순서대로 표시 -->
                         <td>${list.zipcode}</td> <!-- 게시물 제목 -->
                         <td>${list.addr_street}</td>
                         <td>${list.addr_detail}</td>
                         <td>
-                            <input class="button alt" type="button" value="삭제" onclick="location.href='addr_delete.do'">
                             <input class="button alt" type="button" value="수정" onclick="update();">
+                            <input class="button alt" type="button" value="삭제" onclick="deleteAddress('${list.addr_idx}', '${list.no}');">
                         </td>
 
                     </tr>

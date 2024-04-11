@@ -8,11 +8,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="selectList" parameterType="int" resultType="myinfo">
 select 
  rank() over(order by addr_idx desc) as no
+		, addr_idx
 		, mem_idx
 		, zipcode
 		, addr_street
 		, addr_detail
-
 from moviedb.address
 where mem_idx=#{ mem_idx };
 </select>
@@ -50,7 +50,7 @@ update address set 	zipcode=#{zipcode},
 
 <!-- delete -->
 <delete id="delete" parameterType="int">	
-	delete from address  where addr_idx =#{ addr_idx }
+	delete from address where addr_idx =#{ addr_idx }
 </delete>
 
 	

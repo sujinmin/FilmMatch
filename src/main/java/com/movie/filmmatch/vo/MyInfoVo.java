@@ -7,6 +7,7 @@ import lombok.Data;
 @Alias("myinfo")
 public class MyInfoVo {
 	
+	int no;
 	int mem_idx;
 	int addr_idx;
 	int zipcode;

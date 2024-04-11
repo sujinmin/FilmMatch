@@ -61,15 +61,14 @@ public class MyPageController{
 	 * @return
 	 */
 	@RequestMapping("/mypage_myinfo.do")
-	public String mypage_myinfo(MemberVo vo,
-								MyInfoVo info_vo,
-								
+	public String mypage_myinfo(MyInfoVo info_vo,
 								Model model) {
 
-		vo = (MemberVo) request.getSession().getAttribute("user");
+		MemberVo vo = (MemberVo) request.getSession().getAttribute("user");
 		System.out.println(vo);
+
 		//회원정보의 주소 가져오기
-		List<MyInfoVo> list = (List<MyInfoVo>) myinfo_dao.selectList(vo.getMem_idx());					
+		 List<MyInfoVo> list = myinfo_dao.selectList(vo.getMem_idx());					
 
 
 		if (vo == null) {
@@ -78,8 +77,6 @@ public class MyPageController{
 		}
 		
 		request.setAttribute("vo", vo);
-
-		// request.setAttribute("vo", info_vo);
 		model.addAttribute("list", list);
 		//System.out.println(list);
 
@@ -134,9 +131,11 @@ public class MyPageController{
 	@RequestMapping("addr_delete.do")
 	public String addr_delete(int addr_idx) {
 
+		request.getSession().getAttribute("user");
+
 		myinfo_dao.delete(addr_idx);
 
-		return "member/mypage_myinfo";
+		return "redirect:mypage_myinfo.do";
 	}
 	
 
