@@ -16,7 +16,13 @@
 <link rel="stylesheet" href="assets/css/main.css">
  <!-- DAUM 주소검색 API -->
  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <!-- Bootstrap 3.x -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+ <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
  <style>
     input:disabled {
     color: #dd2828;
@@ -58,10 +64,9 @@
 
 
      });
-
-
-        
-	function find_addr() {
+     
+     
+     function find_addr() {
 		new daum.Postcode({
 	        oncomplete: function(data) { //json
 	        	//data = {"zonecode":"13529", "address":"경기 성남시 분당구",..."}
@@ -71,7 +76,6 @@
 	        
 	        }
 	    }).open();
-		
 	} //end: fine_addr()
   	
 	//이메일 정규식 2번 중첩되어 var로 변경
@@ -98,7 +102,7 @@
 		}
 		
 		if (mem_pwd=='') {
-			alert('비밀번호을 입력하세요!')
+            alert('비밀번호을 입력하세요!')
 			send_form.mem_pwd.value='';
 			send_form.mem_pwd.focus();
 			return;
@@ -118,45 +122,96 @@
 		}
 
 		if (regula_phone.test(mem_phone)==false) {
-			alert('전화번호을 입력하세요! \n 옳바른 형식으로 입력하세요!')
+            alert('전화번호을 입력하세요! \n 옳바른 형식으로 입력하세요!')
 			send_form.mem_phone.value='';
 			send_form.mem_phone.focus();
 			return;
 		}
 		
 		if (mem_zipcode=='') {
-			alert('우편번호을 입력하세요!')
+            alert('우편번호을 입력하세요!')
 			send_form.mem_zipcode.value='';
 			send_form.mem_zipcode.focus();
 			return;
 		}
 		if (mem_addr=='') {
-			alert('주소을 입력하세요!')
+            alert('주소을 입력하세요!')
 			send_form.mem_addr.value='';
 			send_form.mem_addr.focus();
 			return;
 		}
-
+        
         if (confirm("정말 수정하시겠습니까?")) {
-                send_form.action = "myinfo_modify.do";
+            send_form.action = "myinfo_modify.do";
                 send_form.submit(); //전송	
-        }else {
-            return false; // 수정 취소 시 전송하지 않음
+            }else {
+                return false; // 수정 취소 시 전송하지 않음
         }
 	}
+    
+    function insert_address(mem_idx) { //주소 insert폼 띄우기
+         // AJAX를 통해 서버에서 파일을 가져옵니다.
+        $.ajax({
+        url         : 'mypage_myinfo_insert_form.do',
+        data		:	{"mem_idx":mem_idx},
+        type        : "GET", // HTTP 메소드는 GET으로 설정합니다.
+        dataType    : "html", // 서버에서 HTML 데이터를 받아오므로 dataType을 html로 설정합니다.
+        success     : function(response) {
 
-    function deleteAddress(addrIdx) {
-        if (confirm("정말로 삭제하시겠습니까?")) {
-            location.href = 'addr_delete.do?addr_idx=' + addrIdx;
+            $('#myModal').modal('show');
+        },
+        error: function(xhr, status, error) {
+            // 에러 처리
+            console.error(error);
         }
+        });
+
+        // location.href = 'mypage_myinfo_insert_form.do?mem_idx=' + mem_idx;
     }
-
-   
-    function deleteAddress(addrIdx,No) {
+    
+    function updateAddress(addr_idx) {
         
-        if (confirm( No + "번 주소를 삭제하시겠습니까?")) {
-            location.href = 'addr_delete.do?addr_idx=' + addrIdx;
-        }
+            $.ajax({
+            	  url		:	"addr_update_form.do",
+            	  data		:	{"addr_idx":addr_idx},
+            	  dataType	:	"json",
+            	  success	:	function(res_data){
+                		  //res_data={"p_idx":1,"p_subject":"제목","p_content":"내용","mem_idx":3}
+                		 // MyInfoVo(no=1, mem_idx=9, addr_idx=11, zipcode=9999, addr_street=9999testtesttest, addr_detail=testtest)
+                         console.log("_________________");
+                            console.log(res_data);
+                            console.log("_________________");
+
+                            modal_no = res_data.no;
+                            modal_addr_idx = res_data.addr_idx;
+                            modal_zipcode = res_data.zipcode;
+                            modal_addr_street = res_data.addr_street;
+                            modal_addr_detail = res_data.addr_detail;
+    
+    
+			   //팝업창(Modal)
+			   $("#myModal").modal({backdrop: "static" });
+			 
+			   $("#popup_addr_idx").html(modal_addr_idx);
+			   $("#popup_no").html(modal_no);
+			   $("#popup_zipcode").html("우편번호 : " + modal_zipcode );
+			   $("#popup_addr_street").html("주소 : " + modal_addr_street );
+			   $("#popup_addr_detail").html("상세 주소 : " + modal_addr_detail );
+    
+		  },
+		  error		:	function(err){
+			  alert(err.responseText);
+		  }
+    
+	  });//end:ajax
+    }
+    
+
+    
+    function deleteAddress(addrIdx,No) {
+        if (confirm( No + "번 주소를 삭제하시겠습니까?")==false) return;
+            
+        location.href = 'addr_delete.do?addr_idx=' + addrIdx;
     }
  </script>
 </head>
@@ -189,9 +244,6 @@
                     <tr>
                         <th>이름</th>
                         <td><input class="form-control" type="text" id="mem_name" name="mem_name" value="${ vo.mem_name }"></td>
-                        <!-- <input>tag의 속성 disabled="disabled"  form이 서버로 넘어갈 떄 주소에body에 안넘어간다. 
-                                                readonly="readonly"는 등록된 값은 넘어간다.	-->
-                    </tr>
                     <tr>
                         <th>아이디</th>
                         <td><input class="form-control" type="text" name="mem_id" readonly="readonly" value="${ vo.mem_id }" >
@@ -281,7 +333,7 @@
 
         <form>
             <table>
-                <input type="button" id="" value="주소추가" onclick="location.href='address_insert.do'">
+                <input type="button" id="mem_idx" value="주소추가" onclick="insert_address('${vo.mem_idx}');">
                 <tr>
                     <th colspan="5"><b>${vo.mem_name}</b>주소목록</th>
                     
@@ -305,7 +357,7 @@
                         <td>${list.addr_street}</td>
                         <td>${list.addr_detail}</td>
                         <td>
-                            <input class="button alt" type="button" value="수정" onclick="update();">
+                            <input class="button alt" type="button" value="수정" onclick="updateAddress();">
                             <input class="button alt" type="button" value="삭제" onclick="deleteAddress('${list.addr_idx}', '${list.no}');">
                         </td>
 

@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+	
 
 @Controller
 public class MyPageController{
@@ -66,10 +67,11 @@ public class MyPageController{
 
 		MemberVo vo = (MemberVo) request.getSession().getAttribute("user");
 		System.out.println(vo);
-
+		
 		//회원정보의 주소 가져오기
-		 List<MyInfoVo> list = myinfo_dao.selectList(vo.getMem_idx());					
-
+		List<MyInfoVo> list = myinfo_dao.selectList(vo.getMem_idx());				
+		System.out.println(list);
+		
 
 		if (vo == null) {
             return "redirect:../member/login_form.do?reason=session_timeout";
@@ -83,7 +85,6 @@ public class MyPageController{
 		return "member/mypage_myinfo";
 	}
 
-
 	/**
 	 * 회원정보 수정
 	 * @param vo
@@ -96,20 +97,49 @@ public class MyPageController{
                             
 							 
 		String mem_ip = request.getRemoteAddr();
-        vo.setMem_ip(mem_ip); // UserVo에 IP 주소 설정
+        vo.setMem_ip(mem_ip);
         
 		member_dao.update(vo);
-
+		
         // 업데이트된 회원 정보를 다시 조회
         MemberVo updatedMember = member_dao.selectOneFromIdx(vo.getMem_idx());
 		
-
+		
         // Model에 업데이트된 회원 정보 바인딩
         model.addAttribute("vo", updatedMember);
-
+		
         return "member/mypage_myinfo";
     }
+	
+	/**
+	 * 주소 등록 폼띄우기
+	 * @return
+	 */
+	@RequestMapping("mypage_myinfo_insert_form.do")
+	public String mypage_myinfo_insert() {
+		
+		MemberVo vo = (MemberVo) request.getSession().getAttribute("user");
+		System.out.println(vo);
 
+		return "member/mypage_myinfo_insert";
+	}
+	
+	/**
+	 * 주소수정폼띄우기
+	 * @param vo
+	 * @return
+	 */
+	@RequestMapping("addr_update_form.do")
+	public String addr_update_form(MyInfoVo vo,
+									Model model) {
+		//회원정보의 주소 가져오기
+		List<MyInfoVo> list = myinfo_dao.selectList(vo.getMem_idx());				
+		//System.out.println(list);
+
+		model.addAttribute("list", list);
+
+		return "member/mypage_myinfo_update";
+	}
 	/**
 	 * 주소수정
 	 * @param vo
@@ -137,6 +167,7 @@ public class MyPageController{
 
 		return "redirect:mypage_myinfo.do";
 	}
+
 	
 
 
