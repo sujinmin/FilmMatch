@@ -17,6 +17,9 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 	
 
@@ -168,6 +171,12 @@ public class MyPageController{
 		return "redirect:mypage_myinfo.do";
 	}
 
+	@RequestMapping("test_modal.do")
+	public String test_modal() {
+
+		return "member/modal";
+	}
+	
 	
 
 

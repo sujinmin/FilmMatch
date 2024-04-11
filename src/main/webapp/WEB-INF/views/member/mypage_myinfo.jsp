@@ -149,11 +149,18 @@
         }
 	}
     
+    $(document).ready(function(){
+        $('#addr_update').click(function(e){
+            e.insert_address();
+            $('#myModal').modal('show');
+        });
+    });
+
     function insert_address(mem_idx) { //주소 insert폼 띄우기
          // AJAX를 통해 서버에서 파일을 가져옵니다.
         $.ajax({
         url         : 'mypage_myinfo_insert_form.do',
-        data		:	{"mem_idx":mem_idx},
+        data		: {"mem_idx":mem_idx},
         type        : "GET", // HTTP 메소드는 GET으로 설정합니다.
         dataType    : "html", // 서버에서 HTML 데이터를 받아오므로 dataType을 html로 설정합니다.
         success     : function(response) {
@@ -190,17 +197,16 @@
     
     
 			   //팝업창(Modal)
-			   $("#myModal").modal({backdrop: "static" });
-			 
-			   $("#popup_addr_idx").html(modal_addr_idx);
-			   $("#popup_no").html(modal_no);
-			   $("#popup_zipcode").html("우편번호 : " + modal_zipcode );
-			   $("#popup_addr_street").html("주소 : " + modal_addr_street );
-			   $("#popup_addr_detail").html("상세 주소 : " + modal_addr_detail );
-    
-		  },
+            $("#myModal").modal({ backdrop: "static" });
+            $("#popup_addr_idx").html(modal_addr_idx);
+            $("#popup_no").html(modal_no);
+            $("#popup_zipcode").html("우편번호 : " + modal_zipcode);
+            $("#popup_addr_street").html("주소 : " + modal_addr_street);
+            $("#popup_addr_detail").html("상세 주소 : " + modal_addr_detail);
+        },
 		  error		:	function(err){
 			  alert(err.responseText);
+              console.log(err);
 		  }
     
 	  });//end:ajax
@@ -351,13 +357,13 @@
                     <tr>
                         <!-- <td>${list.no}</td> -->
                         <td>${list.no}
-                            <input type="hidden" id="addr_idx" value="${ list.addr_idx}">
+                            <input type="hidden" id="addr_idx" value="${ list.addr_idx }">
                         </td> <!-- 번호를 순서대로 표시 -->
                         <td>${list.zipcode}</td> <!-- 게시물 제목 -->
                         <td>${list.addr_street}</td>
                         <td>${list.addr_detail}</td>
                         <td>
-                            <input class="button alt" type="button" value="수정" onclick="updateAddress();">
+                            <input class="button alt" id="addr_update" type="button" value="수정" onclick="updateAddress();">
                             <input class="button alt" type="button" value="삭제" onclick="deleteAddress('${list.addr_idx}', '${list.no}');">
                         </td>
 
