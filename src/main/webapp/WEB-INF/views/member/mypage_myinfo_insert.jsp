@@ -26,6 +26,19 @@
  <style>
 
  </style>
+  <script>
+    $(document).ready(function(){
+        // 주소 등록 버튼 클릭 시 모달 띄우기
+        $("#btn_popup_update").click(function(){
+            $("#insert_modal").modal("show");
+        });
+  
+        // 모달이 숨겨질 때 폼 초기화
+        $("#insert_modal").on("hidden.bs.modal", function () {
+            $(this).find("form")[0].reset();
+        });
+    });
+  </script>
 <script type="text/javascript">
 
      function addr_insert(){
@@ -50,12 +63,13 @@
 
 
  </script>
+
 </head>
 <body>
 
 
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="insert_modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
   
       <!-- Modal content-->

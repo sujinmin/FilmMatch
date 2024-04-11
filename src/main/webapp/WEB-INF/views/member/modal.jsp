@@ -21,7 +21,7 @@
           $('#testModal').modal("show");
       });
     });
-    
+
     function find_addr() {
 		new daum.Postcode({
 	        oncomplete: function(data) { //json
@@ -42,21 +42,7 @@
 
   <!-- 회원가입 확인 Modal-->
 	<div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<!-- <div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-						<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					</button>
-					<h3 class="modal-title" id="exampleModalLabel">모달테스트</h5>
-				</div>
-				<div class="modal-body">내용 입력 !!</div>
-				<div class="modal-footer">
-					<a class="btn" id="modalY" href="#">예</a>
-					<button class="btn" type="button" data-dismiss="modal">아니요</button>
-				</div>
-			</div>
-		</div> -->
+
               <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -66,7 +52,7 @@
         <div class="modal-body">
           <form>
             <table>
-                <input type="hidden" id="mem_idx" value="${ user.mem_idx}">
+                <input type="hidden" id="mem_idx" value="${ user.mem_idx }">
                 <tr>
                     <th colspan="2">${ vo.mem_name }님의 주소등록 </th>
                 </tr>

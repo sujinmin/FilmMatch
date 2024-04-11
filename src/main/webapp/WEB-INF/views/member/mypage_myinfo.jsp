@@ -152,7 +152,8 @@
     $(document).ready(function(){
         $('#addr_update').click(function(e){
             e.insert_address();
-            $('#myModal').modal('show');
+            // $('#myModal').modal('show');
+            $("#myModal").load("mypage_myinfo_insert.jsp");
         });
     });
 
@@ -164,8 +165,15 @@
         type        : "GET", // HTTP 메소드는 GET으로 설정합니다.
         dataType    : "html", // 서버에서 HTML 데이터를 받아오므로 dataType을 html로 설정합니다.
         success     : function(response) {
+            
+            console.log("성공!!!");
+            alert(response);
 
-            $('#myModal').modal('show');
+            // 가져온 HTML을 모달 바디에 넣어줍니다.
+            $('#insert_modal .modal-body').html(response);
+            alert(response);
+            // 모달을 보여줍니다.
+            $('#insert_modal').modal('show');
         },
         error: function(xhr, status, error) {
             // 에러 처리
