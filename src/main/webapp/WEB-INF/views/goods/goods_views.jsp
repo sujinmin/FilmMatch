@@ -206,6 +206,7 @@ function adjustDiv3Position() {
 			<div class="div1"><img src="${ pageContext.request.contextPath }/upload/${vo.image_url}"  ><br>
 
 			 <c:if test="${ user.mem_grade eq '관리자' }">
+			 <a onclick="location.href='${ pageContext.request.contextPath }/admin/goods_list_admin.do'" class="button  small">상품리스트</a>
 			<a onclick="delete_goods(${vo.goods_idx},'${vo.image_url}');" class="button  small">상품 삭제</a>
 			<a onclick="update_goods(${vo.goods_idx});" class="button  small">상품 수정</a>
 			</c:if>

@@ -37,6 +37,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="${ pageContext.request.contextPath }/css/main/main.css"></head>
+<script src="https://cdn.jsdelivr.net/npm/inko@1.1.1/inko.min.js"></script>
+
+​
+
 <body>
 
 
@@ -59,7 +63,6 @@
 </div>
 </div>
 <div id="im5">
-<div id="im2">영화: 파묘</div>
 </div>
 <br>
 <div id=change >
@@ -74,13 +77,14 @@
 <div id="boxxx">
 	<a id="cate" href="genre.do">장르별&ensp; |</a>
 	<a id="cate1" href="actor.do">배우별&ensp; |</a>
-	<a id="cate2" href="nation.do">나라별 &ensp;|</a>
+	<a id="cate2" href="nation.do">나라별&ensp;|</a>
 	<a id="cate3" href="theater.do">근처극장보기&ensp;|</a>
 	<a id="cate3" href="${ pageContext.request.contextPath }/goods/list.do">굿즈상품</a>
 	<form class="search-box">
-	<input class="search-text" type="text" placeholder="콘텐츠, 인물, 컬렉션, 유저를 검색해보세요." /> 
-	<button class="search-btn" value="검색"> <i class="fa-solid fa-magnifying-glass"></i>
-	</button></form>	
+    <input class="search-text" type="text" placeholder="(영문검색)영화검색해보세요." /> 
+    <button class="search-btn" value="검색" onclick="showSearchText(); return false;"> <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+	</form>	
 </div>	 
 
 <%-- 캐러셀 영화 인기  API --%>
@@ -150,23 +154,27 @@
 	
 
 		<!-- Two --><section id="twoab">
+
+
 		<div id="ta2">
 		[최신 영화 뉴스]
 		<br><br>
 		<article><c:forEach var="vo"  items="${ newslist }" >
+			
 	   		<div id="newsbox1">
             <div id="newstitle1"><a href="${vo.link}">${ vo.title }</a></div>
             <div id="newsdes1">${ vo.description }</div>
             <div id="newsdata1">${ fn:substring(vo.pubDate,0,25) }</div>
 			</div>
+			
       	</c:forEach>
-		</article></div>
+		</article></div> 
 
 		<div id="ta3">
-		[최신 영화 뉴스]
+		[극장 뉴스]
 		<br><br>	
 		<article >
-		<c:forEach var="vo"  items="${ newslist }" >
+		<c:forEach var="vo"  items="${ amnewlist }" >
 	   		<div id="newsbox2">
             <div id="newstitle2"><a href="${vo.link}">${ vo.title }</a></div>
             <div id="newsdes2">${ vo.description }</div>
@@ -174,7 +182,7 @@
 			</div>
       	</c:forEach>
 		</article>
-		</div>
+		</div> 
 		
 			<%-- goods 상품 --%>
 		

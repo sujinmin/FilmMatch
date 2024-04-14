@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.filmmatch.dao.MovieCommentDao">
+
+  	<!-- 전체조회 -->
+ 	<select id="selectList" parameterType="Map" resultType="mcomment">
+ 		select * from moviecomment where movie_id = #{ movie_id }
+ 		order by cmt_idx desc
+ 	</select>
+		
+	<select id="sumpoint" parameterType="String" resultType="int" >
+		SELECT ROUND(AVG(star_point), 2) AS average_star_point FROM moviecomment WHERE movie_id = #{movie_id};
+	</select> 
+ 
+ 	<!-- 조건별(페이징) 조회 -->
+ 	<select id="selectComList" parameterType="Map" resultType="mcomment">
+ 	  select * from
+	 (
+		  select 
+		   *,
+		   rank() over(order by cmt_idx desc) as no
+		  from moviecomment 
+		  where movie_id=#{ movie_id }
+	 ) c
+	 where no between #{ start } and #{ end }
+ 	</select>
+ 
+ 	<!-- 전체(b_idx)별 전체게시물 수 -->
+ 	<select id="selectRowTotal" parameterType="String" resultType="int">
+ 		select ifnull(count(*),0) from moviecomment where movie_id=#{movie_id}
+ 	</select>
+
+ 
+ 	<!-- 추가 -->
+  	<insert id="insert" parameterType="mcomment">
+  		insert into moviecomment values(null,#{cmt_content},#{cmt_ip},now(),#{movie_id},#{mem_idx},#{mem_id},#{mem_name},0)
+ 	 </insert>
+  
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from moviecomment where cmt_idx = #{cmt_idx}
+	</delete>
+	
+	<!-- b_idx글 삭제시 여기 달린 댓글 모두 삭제 -->
+	<delete id="delete_movie_id" parameterType="String">
+		delete from moviecomment where movie_id=#{ movie_id }
+	</delete>
+
+	<update id="point_update" parameterType="mcomment" >
+	update moviecomment set star_point= #{ star_point } where cmt_idx=#{ cmt_idx }
+	</update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

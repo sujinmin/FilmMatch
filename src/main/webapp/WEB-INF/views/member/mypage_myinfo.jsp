@@ -14,14 +14,13 @@
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <link rel="stylesheet" href="assets/css/main.css">
- <!-- DAUM 주소검색 API -->
- <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
- <!-- Bootstrap 3.x -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
- <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+ 
+<!-- DAUM 주소검색 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
  <style>
     input:disabled {
@@ -36,34 +35,42 @@
 <script type="text/javascript">
 
     $(document).ready(function() {// 페이지 로드 시에 실행될 코드
+        
+        //로그인여부 체크
+		if ("${ empty user }" == "true") {
+			if(confirm("댓글쓰기는 로그인후에 가능합니다\n로그인하시겠습니까?")==false) return;
+			
+			location.href="../member/login_form.do?url=" + encodeURIComponent(location.href);			
+			return;
+		
+		}//로그인여부
     
-    var policy_a = "${vo.policy_a}";
-    var policy_b = "${vo.policy_b}";
-    var mem_gender = "${vo.mem_gender}";
-
-    
-    if (mem_gender === '남자') {
-        $("#mem_gender").val('남자');
-    } else if (mem_gender === '여자') {
-        $("#mem_gender").val('여자');
-    }
-
-    if (policy_a === 'Y') {
-        $("#policy_a").val('Y');
-    } else if (policy_a === 'N') {
-        $("#policy_a").val('N');
-    } 
-
-    if (policy_b === 'Y') {
-        $("#policy_b").val('Y');
-    } else if (policy_b === 'N') {
-        $("#policy_b").val('N');
-    }
+        var policy_a = "${vo.policy_a}";
+        var policy_b = "${vo.policy_b}";
+        var mem_gender = "${vo.mem_gender}";
 
 
+        
+        if (mem_gender === '남자') {
+            $("#mem_gender").val('남자');
+        } else if (mem_gender === '여자') {
+            $("#mem_gender").val('여자');
+        }
 
+        if (policy_a === 'Y') {
+            $("#policy_a").val('Y');
+        } else if (policy_a === 'N') {
+            $("#policy_a").val('N');
+        } 
 
+        if (policy_b === 'Y') {
+            $("#policy_b").val('Y');
+        } else if (policy_b === 'N') {
+            $("#policy_b").val('N');
+        }
      });
+
+     
      
      
      function find_addr() {
@@ -148,42 +155,32 @@
                 return false; // 수정 취소 시 전송하지 않음
         }
 	}
+
     
-    $(document).ready(function(){
-        $('#addr_update').click(function(e){
-            e.insert_address();
-            // $('#myModal').modal('show');
-            $("#myModal").load("mypage_myinfo_insert.jsp");
-        });
-    });
-
-    function insert_address(mem_idx) { //주소 insert폼 띄우기
-         // AJAX를 통해 서버에서 파일을 가져옵니다.
-        $.ajax({
-        url         : 'mypage_myinfo_insert_form.do',
-        data		: {"mem_idx":mem_idx},
-        type        : "GET", // HTTP 메소드는 GET으로 설정합니다.
-        dataType    : "html", // 서버에서 HTML 데이터를 받아오므로 dataType을 html로 설정합니다.
-        success     : function(response) {
-            
-            console.log("성공!!!");
-            alert(response);
-
-            // 가져온 HTML을 모달 바디에 넣어줍니다.
-            $('#insert_modal .modal-body').html(response);
-            alert(response);
-            // 모달을 보여줍니다.
-            $('#insert_modal').modal('show');
-        },
-        error: function(xhr, status, error) {
-            // 에러 처리
-            console.error(error);
-        }
-        });
-
-        // location.href = 'mypage_myinfo_insert_form.do?mem_idx=' + mem_idx;
+    function addr_add() {
+    document.getElementById('#addr_add_btn').style.display = 'block';
     }
     
+
+    function addr_insert() { // insert버튼
+
+        location.href='insert.do'
+        
+    }
+
+    function find_addr_add() {
+		new daum.Postcode({
+	        oncomplete: function(data) { //json
+	        	//data = {"zonecode":"13529", "address":"경기 성남시 분당구",..."}
+	        	// 주소창에서 선택된 주소값을 입력창에 넣어준다
+	        	$("#zipcode").val(data.zonecode);
+	        	$("#addr_street").val(data.roadAddress);
+	        
+	        }
+	    }).open();
+	} //end: fine_addr()
+  	
+
     function updateAddress(addr_idx) {
         
             $.ajax({
@@ -220,7 +217,41 @@
 	  });//end:ajax
     }
     
-
+    
+    function updateAddress(addr_idx) {
+        
+            $.ajax({
+            	  url		:	"addr_update.do",
+            	  data		:	{"addr_idx":addr_idx},
+            	  dataType	:	"json",
+            	  success	:	function(res_data){
+                		  //res_data={"p_idx":1,"p_subject":"제목","p_content":"내용","mem_idx":3}
+                		 // MyInfoVo(no=1, mem_idx=9, addr_idx=11, zipcode=9999, addr_street=9999testtesttest, addr_detail=testtest)
+                
+             modal_no = res_data.no;
+			modal_addr_idx = res_data.addr_idx;
+			modal_zipcode = res_data.zipcode;
+			modal_addr_street = res_data.addr_street;
+			modal_addr_detail = res_data.addr_detail;
+    
+    
+			   //팝업창(Modal)
+			   $("#myModal").modal({backdrop: "static" });
+			 
+			   $("#popup_addr_idx").html(modal_addr_idx);
+			   $("#popup_no").html(modal_no);
+			   $("#popup_zipcode").html("우편번호 : " + modal_zipcode );
+			   $("#popup_addr_street").html("주소 : " + modal_addr_street );
+			   $("#popup_addr_detail").html("상세 주소 : " + modal_addr_detail );
+    
+		  },
+		  error		:	function(err){
+			  alert(err.responseText);
+		  }
+    
+	  });//end:ajax
+    }
+    
     
     function deleteAddress(addrIdx,No) {
         if (confirm( No + "번 주소를 삭제하시겠습니까?")==false) return;
@@ -232,7 +263,11 @@
 <body>
 
 <!-- Header -->
-	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp"/>
+<!-- <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp"/> -->
+<%@include file="../main/header.jsp" %>
+
+
+
 
 <section id="main">
     <div class="inner">
@@ -246,7 +281,7 @@
             <!-- <canvas id="myBarChart" width="100%" height="50"></canvas> -->
             <div class="panel-body">
                 <table class="table">
-                    
+                    <tr></tr>
                     <tr>
                         <th colspan="2">
                             <div>
@@ -300,9 +335,9 @@
                             <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
                                 <input class="form-control" type="text" name="mem_zipcode" id="mem_zipcode" value="${ vo.mem_zipcode }">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr();">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                             </div>
+                            <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr();">
                             <input class="form-control" type="text" name="mem_addr"  id="mem_addr" size="50" value="${ vo.mem_addr }">
                         </td>
                     </tr>
@@ -347,12 +382,33 @@
 
         <form>
             <table>
-                <input type="button" id="mem_idx" value="주소추가" onclick="insert_address('${vo.mem_idx}');">
+                <!-- <input type="button" id="addr_add" value="주소추가" onclick="insert_address('${vo.mem_idx}');"> -->
+                <input type="button" id="addr_add" value="주소추가" onclick="addr_add();">
                 <tr>
                     <th colspan="5"><b>${vo.mem_name}</b>주소목록</th>
                     
                 </tr>
-                
+                <tr id="addr_add_btn" style="display: none;">
+                    <th colspan="2">
+                        <h4> 주소등록 :</h4>
+                    </th>
+                    <td colspan="3">
+                        <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
+                            <input class="form-control" type="text" name="zipcode" id="zipcode" value="${ zipcode }">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr_add();">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+                        <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
+                            <input class="form-control" type="text" name="addr_street"  id="addr_street" size="50" value="${ addr_street }">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="text" id="addr_detail" value="${addr_detail}" placeholder="상세주소를 입력해주세요." >
+                        </div>
+                        <input type="button" id="addr_insert" value="입력" onclick="addr_insert(this.form);" >
+                    </td>
+                    
+                </tr>
                 
                 <tr>
                     <th>번호</th>
@@ -361,17 +417,18 @@
                     <th>상세주소</th>
                     <th>편집</th>
                 </tr>
+
                 <c:forEach items="${ list }" var="list">
                     <tr>
                         <!-- <td>${list.no}</td> -->
                         <td>${list.no}
-                            <input type="hidden" id="addr_idx" value="${ list.addr_idx }">
+                            <!-- <input type="hidden" id="addr_idx" value="${ list.addr_idx }"> -->
                         </td> <!-- 번호를 순서대로 표시 -->
                         <td>${list.zipcode}</td> <!-- 게시물 제목 -->
                         <td>${list.addr_street}</td>
                         <td>${list.addr_detail}</td>
                         <td>
-                            <input class="button alt" id="addr_update" type="button" value="수정" onclick="updateAddress();">
+                            <input class="button alt" id="addr_update" type="button" value="수정" onclick="updateAddress('${list.addr_idx}');">
                             <input class="button alt" type="button" value="삭제" onclick="deleteAddress('${list.addr_idx}', '${list.no}');">
                         </td>
 
@@ -402,4 +459,9 @@
 </section>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/footer.jsp"/>
 <!-- Scripts -->
-<script src="assets/js/jquery.min.js"></script><script src="assets/js/skel.min.js"></script><script src="assets/js/util.js"></script><script src="assets/js/main.js"></script></body></html>
+<!-- <script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/skel.min.js"></script>
+<script src="../assets/js/util.js"></script>
+<script src="../assets/js/main.js"></script> -->
+</body>
+</html>

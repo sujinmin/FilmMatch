@@ -2471,7 +2471,7 @@
 	}
 
 		table tbody tr {
-			border: solid 1px;
+			/* border: solid 1px; */
 			border-left: 0;
 			border-right: 0;
 		}
@@ -2483,8 +2483,8 @@
 		table th {
 			font-size: 0.9em;
 			font-weight: 700;
-			padding: 0 0.75em 0.75em 0.75em;
-			text-align: left;
+			padding: 0.75em 0.75em 0.75em 0.75em;
+			text-align: center;
 		}
 
 		table thead {
@@ -2522,7 +2522,7 @@
 			}
 
 	table tbody tr {
-		border-color: #e5474b;
+		/* border-color: #33ccff; */
 	}
 
 		table tbody tr:nth-child(2n + 1) {
@@ -2530,11 +2530,11 @@
 		}
 
 	table th {
-		color: #e5474b;
+		color: #33ccff;
 	}
 
 	table thead {
-		border-bottom-color: #e5474b;
+		/* border-bottom-color: #e5474b; */
 	}
 
 	table tfoot {
@@ -4048,7 +4048,11 @@
 #newsbox1{
 	width: 700px;
 	height: 120px;
+	
+	
 }
+
+
 
 #newstitle1{
 	font-size: 20px;
@@ -4068,7 +4072,10 @@
 #newsbox2{
 	width: 700px;
 	height: 120px;
+
+
 }
+
 
 #newstitle2{
 	font-size: 20px;

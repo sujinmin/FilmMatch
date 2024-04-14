@@ -59,8 +59,9 @@
 			f.b_content.focus();
 			return;
 		}
-		alert('문의 하시겠습니까?');
-		f.action ="insert.do"; // /support/insert.do -> supportController
+
+		alert('문의처리되었습니다');
+		f.action ="qna_insert.do"; // /support/qna_insert.do -> supportController
 		f.submit();
     }
 

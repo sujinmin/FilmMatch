@@ -107,6 +107,7 @@ form.example::after {
 
 <!-- Header -->
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp"/>
+
 <section id="one">
 			<div class="container">
 				<div class="row">
@@ -140,18 +141,18 @@ form.example::after {
 						</div>
 					    <br>
 
-						
-						 
+
 					<div class="col-sm-8">
 						
 						<div class="row" style="margin-bottom: 5px;">
-							<div class="col-sm-3">
+							<form class="col-sm-3">
 							   <input class="btn btn-success" type="button"  value="문의하기"
 										  onclick="location.href='qna_form.do'" >
 							   
-							</div>
-
-						<table class="table-wrapper"> 
+							</form>
+						 
+					
+					<table class="table-wrapper"> 
 							<!-- 테이블 헤더 -->
 							<tr>
 								<th>번호</th>
@@ -172,14 +173,15 @@ form.example::after {
 									
 									<!-- 제목 -->
 									<td>
+								
 										<!-- 메인글이 아니면 ㄴ 붙여라 -->
 										<c:if test="${ vo.b_step ne 0 }">ㄴ</c:if><!-- ne = not 이퀄 -->
 						
 										<!-- 사용중 -- 상세페이지로 -->                              
 										<c:if test="${ vo.b_use eq 'y' }">
-										<a href="view.do?b_idx=${ vo.b_idx }&page=${ empty param.page ? 1 : param.page }">${ vo.b_subject }</a>
+										<a href="qna_view.do?b_idx=${ vo.b_idx }&page=${ empty param.page ? 1 : param.page }">${ vo.b_subject }</a>
 										</c:if>
-										</td>
+									</td>
 									
 									<!-- 작성자 -->
 									<td class="mem_name">

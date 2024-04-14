@@ -53,9 +53,9 @@ $("#boxf").animate({"left":"+=100"},100, function(){
 });
 }
 
-function change_movie1(key,name){		
+function change_movie1(key){		
 $("#frame").attr("src", `https://www.youtube.com/embed/${key}`);
-$("#im2").html(`제목: ${name}`);
+//$("#im2").html(`제목: ${name}`);
 }
 
 
@@ -64,5 +64,13 @@ function movie_info(id,media_type) {
     window.location.href = url;
 }
 
+function showSearchText() {
+    // 폼으로부터 입력된 텍스트 가져오기
+    var searchText = document.querySelector('.search-text').value;
+    // // 가져온 텍스트를 어딘가에 표시하거나 활용할 수 있습니다.
+
+	window.location.href = "searchmovie.do?query=" + encodeURIComponent(searchText);
+}
+	
 
 

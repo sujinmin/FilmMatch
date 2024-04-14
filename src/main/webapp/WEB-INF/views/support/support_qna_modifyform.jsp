@@ -65,7 +65,7 @@
 		}
 
 		if (confirm("정말 수정하시겠습니까?")==false)return;
-        f.action = "modify.do";
+        f.action = "qna_modify.do";
 		f.submit();
     }
 

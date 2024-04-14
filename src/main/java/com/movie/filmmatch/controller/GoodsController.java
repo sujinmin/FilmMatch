@@ -19,9 +19,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movie.filmmatch.movieconstant.MovieConstant;
 import com.movie.filmmatch.service.GoodsService;
+import com.movie.filmmatch.service.InventoryService;
 import com.movie.filmmatch.util.Paging;
 import com.movie.filmmatch.vo.CategoriesVo;
 import com.movie.filmmatch.vo.GoodsVo;
+import com.movie.filmmatch.vo.InventoryVo;
 import com.movie.filmmatch.vo.MemberVo;
 
 import jakarta.servlet.ServletContext;
@@ -35,6 +37,9 @@ public class GoodsController {
 
     @Autowired
     ServletContext application;
+
+    @Autowired
+    InventoryService invetory_Service;
 
     /**
      * 굿즈 리스트
@@ -50,7 +55,7 @@ public class GoodsController {
             @RequestParam(name = "search_text", required = false) String search_text) {
 
         int nowPage = 1;
-
+       
         if (search_option == null || search_option.isEmpty()) {
             search_option = "all";
         }
@@ -243,6 +248,19 @@ public class GoodsController {
 
         }
 
+
+        InventoryVo InvenVo=new InventoryVo();
+        InvenVo.setName(vo.getGoods_name());
+        InvenVo.setCnt(vo.getGoods_quantity());
+
+        try { //입고등록해
+			invetory_Service.insert_in(InvenVo);
+		} catch (Exception e) {
+
+            System.out.println("에러");
+			System.out.println(e);
+		}
+		
         String abs_path = application.getRealPath("/upload/");
         // System.out.println(abs_path);
         String image_url = "no_file";
@@ -271,7 +289,7 @@ public class GoodsController {
         }
 
         // String p_ip = request.getRemoteAddr();
-        System.out.println(image_url);
+        // System.out.println(image_url);
         vo.setImage_url(image_url);
         goods_service.goods_insert(vo);
         return "redirect:list.do";
@@ -399,7 +417,9 @@ public class GoodsController {
         }
 
         goods_service.goods_delete(goods_idx);
-        return "redirect:list.do";
+        return "redirect:../admin/goods_list_admin.do";
     }
+
+
 
 }

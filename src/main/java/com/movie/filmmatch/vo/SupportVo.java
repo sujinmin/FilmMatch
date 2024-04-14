@@ -26,7 +26,7 @@ public class SupportVo {
     int no; // "" 게시판 rank() : 글번호컬럼명
     int cmt_count; // "" 게시판 댓글의 개수
 
-    int community_page; // "" 게시판 페이지
+    // int community_page; // "" 게시판 페이지 임시주석처리
 
     public SupportVo() {
     }
@@ -44,7 +44,7 @@ public class SupportVo {
      * @param community_page
      */
     public SupportVo(int b_idx, String b_subject, String b_content, String b_ip, int mem_idx, String mem_name,
-            int b_ref, int community_page) {
+            int b_ref) {
         this.b_idx = b_idx;
         this.b_subject = b_subject;
         this.b_content = b_content;
@@ -52,7 +52,7 @@ public class SupportVo {
         this.mem_idx = mem_idx;
         this.mem_name = mem_name;
         this.b_ref = b_ref;
-        this.community_page = community_page;
+        // this.community_page = community_page;
     }
 
     /**
@@ -70,7 +70,7 @@ public class SupportVo {
      * @param community_page
      */
     public SupportVo(int b_idx, String b_subject, String b_content, String b_ip, int mem_idx, String mem_name,
-            int b_ref, int b_step, int b_depth, int community_page) {
+            int b_ref, int b_step, int b_depth) {
         this.b_idx = b_idx;
         this.b_subject = b_subject;
         this.b_content = b_content;
@@ -80,7 +80,7 @@ public class SupportVo {
         this.b_ref = b_ref;
         this.b_step = b_step;
         this.b_depth = b_depth;
-        this.community_page = community_page;
+        // this.community_page = community_page;
     }
 
     /**

@@ -89,7 +89,7 @@
 
 <div style="width:1200px; height:770px;margin:auto;">
     <c:forEach var="nation1" items="${list}"  >
-		<c:if test="${nation1.original_language eq 'ko' }">
+		<c:if test="${nation1.original_language eq 'ko' && !nation1.overview.isEmpty()}">
 				<div id="gcontents" style="width:1200px;height:225px;margin-top:10px;border:1px solid black;background-color:black;">
 				<div style="width:155px; height:224px;float:left;">
 				<% count++; %>
@@ -112,7 +112,7 @@
 
 <div style="width:1200px; height:770px;margin:auto;">
     <c:forEach var="nation" items="${list}"  varStatus="i">
-    <c:if test="${nation.original_language eq 'en'&& not empty nation.overview && i.count < 4}">
+    	<c:if test="${nation.original_language eq 'en'&& not empty nation.overview && i.count < 4}">
 		
 			<div id="gcontents" style="width:1200px;height:225px;margin-top:10px;border:1px solid black;background-color:black;">
             <div style="width:155px; height:224px;float:left;">
@@ -130,7 +130,7 @@
 
 
 <div id="his">
-	[AmericaMovie]
+	[japanMovie]
 </div>
 
 <div style="width:1200px; height:770px;margin:auto;">

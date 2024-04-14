@@ -26,24 +26,9 @@
  <style>
 
  </style>
-  <script>
-    $(document).ready(function(){
-        // 주소 등록 버튼 클릭 시 모달 띄우기
-        $("#btn_popup_update").click(function(){
-            $("#insert_modal").modal("show");
-        });
-  
-        // 모달이 숨겨질 때 폼 초기화
-        $("#insert_modal").on("hidden.bs.modal", function () {
-            $(this).find("form")[0].reset();
-        });
-    });
-  </script>
+
 <script type="text/javascript">
 
-     function addr_insert(){
-         
-     }
         
 	function find_addr() {
 		new daum.Postcode({
@@ -68,10 +53,30 @@
 <body>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- Modal -->
-<div id="insert_modal" class="modal fade" role="dialog">
+<!-- ㅇㅇㅇㅇㅇㅇㅇ -->
+<div id="insert_modal2" class="modal fade" role="dialog">
     <div class="modal-dialog">
-  
+
+      <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -88,7 +93,7 @@
                 <tr>
                     <th>우편번호</th>
                     <tb>
-                        <input class="form-control" type="text" name="addr_zipcode" id="addr_zipcode" value="${ vo.addr_zipcode }">
+                        <input class="form-control" type="text" name="addr_zipcode" id="addr_zipcode" value="${ vo1.zipcode }">
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr();">
                         &nbsp;&nbsp;&nbsp;&nbsp;
@@ -96,11 +101,11 @@
                 </tr>
                 <tr>
                     <th>주소</th>
-                    <tb><input type="text" id="addr_street" value="${ vo.addr_street}"></tb>
+                    <tb><input type="text" id="addr_street" value="${ vo1.addr_street}"></tb>
                 </tr>
                 <tr>
                     <th>상세주소</th>
-                    <tb><input type="text" id="addr_detail" value="${ vo.addr_detail }"></tb>
+                    <tb><input type="text" id="addr_detail" value="${ vo1.addr_detail }"></tb>
                 </tr>
             </table>
           </form>
@@ -125,6 +130,8 @@
           
         </div>
       </div>
+
+        </div><!-- class="modal fade" -->
   
     </div>
   </div>

@@ -140,13 +140,28 @@ body {
  </style>
 </head>
 <!-- Header -->
-		<header id="header"><div class="inner">
+		<header id="header">
+		<div class="inner">
 					<a href="${pageContext.request.contextPath}/index.do" class="logo"><span class="film">Film</span><span class="flow">Match</span></a>
-					<nav id="nav"><a href="${pageContext.request.contextPath}/member/login_form.do">Login</a>
-						<a href="${pageContext.request.contextPath}/mypage_form.do">Mypage</a>
-                        <a href="${pageContext.request.contextPath}/admin/main.do">Admin</a>
-						<a href="${pageContext.request.contextPath}/support/support_home.do">Support</a>
+					<nav id="nav">
+													<c:if test="${ empty sessionScope.user }">
+								<a href="${pageContext.request.contextPath}/member/login_form.do">LOGIN</a>
+							</c:if>
+							<c:if test="${ ! empty sessionScope.user }"><p style="font-size:80px; ">${user.mem_name}님</p>
+								<a href="${pageContext.request.contextPath}/member/logout.do">LOGOUT</a>
+								<a href="${pageContext.request.contextPath}/mypage_form.do">MYPAGE</a>
+							</c:if>
+						 <c:if test="${ user.mem_grade eq '관리자' }">
+                        <a href="${pageContext.request.contextPath}/admin/main.do">ADMIN</a>
+							</c:if>
+						<a href="${pageContext.request.contextPath}/support/home.do">SUPPORT</a>
                         
-					</nav></div>
+					</nav>
+		</div>
+			
+					
+					
+					
+
 			</header>
 			

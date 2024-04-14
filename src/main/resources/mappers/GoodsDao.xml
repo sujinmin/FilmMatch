@@ -5,7 +5,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.movie.filmmatch.dao.GoodsDao">
 <!-- 목록조회 메인화면 굿즈-->
 <select id="selectList" resultType="goods">
-select * from goods order by goods_idx desc
+<![CDATA[
+ WITH RECURSIVE category_path AS (
+  SELECT cate_id, cate_name, cate_parent_id, cate_name AS path
+  FROM categories
+  WHERE cate_parent_id IS NULL
+  UNION ALL
+  SELECT c.cate_id, c.cate_name, c.cate_parent_id, CONCAT(cp.path, '<', c.cate_name)
+  FROM categories c
+  JOIN category_path cp ON c.cate_parent_id = cp.cate_id
+)
+SELECT  g.*,path
+FROM category_path p
+join goods g
+on p.cate_id=g.cate_id
+]]>
 </select>
 
 	<!-- 검색된 게시물수 -->

@@ -1,17 +1,26 @@
 package com.movie.filmmatch.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.movie.filmmatch.dao.MemberDao;
+import com.movie.filmmatch.service.GoodsService;
+import com.movie.filmmatch.service.InventoryService;
+import com.movie.filmmatch.vo.GoodsVo;
+import com.movie.filmmatch.vo.InventoryVo;
 import com.movie.filmmatch.vo.MemberVo;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
 
 
 
@@ -26,6 +35,12 @@ public class AdminController {
 
     @Autowired
     HttpServletRequest request;
+
+    @Autowired
+    GoodsService goods_service;
+
+    @Autowired
+    InventoryService invetory_Service;
 
 
     /**
@@ -164,6 +179,112 @@ public class AdminController {
         return "redirect:admin_member.do";
     }
     
+    
+    /**
+     * 상품 리스트 
+     */
+    @RequestMapping("goods_list_admin.do")
+    public String goods_list_admin(Model model){
+        Map<String,List<GoodsVo>> map=goods_service.select_list();
+        model.addAttribute("map", map);
 
+
+
+        return "admin/goods_list_admin";
+    }
+
+
+
+
+
+
+
+
+    /**
+     * 입고_재고_출고 관리 페이지
+     * @return
+     */
+    // /product/insert_in.do?name=TV&cnt=100
+	@RequestMapping("admin_inventory.do")
+	public String admin_inventory(Model model) {
+		
+        Map<String, List<InventoryVo>> map = invetory_Service.selectList();
+		
+		//request Binding
+		model.addAttribute("map", map);
+		
+		return "admin/inventory/admin_inventory";
+	}
+    
+    /**
+     * 입고 등록
+     * @return
+     */
+    // /product/insert_in.do?name=TV&cnt=100
+	@RequestMapping("insert_in.do")
+	public String insert_in(InventoryVo vo) {
+		
+		try { //입고등록해
+			invetory_Service.insert_in(vo);
+		} catch (Exception e) {
+
+            System.out.println("에러");
+			System.out.println(e);
+		}
+		
+		return "redirect:admin_inventory.do";
+	}
+    /**
+     * 출고 등록
+     */
+    
+    @RequestMapping("insert_out.do")
+    public String insert_out(InventoryVo vo,RedirectAttributes attr) {
+        System.out.println("출고!");
+        try { //출고등록해
+            invetory_Service.insert_out(vo);
+        } catch (Exception e) {
+          
+            String message = e.getMessage();
+            System.out.println(message);
+            attr.addAttribute("error", message);
+        }
+        
+        return "redirect:admin_inventory.do";
+    }
+
+    
+    @RequestMapping("delete_in.do")
+		public String delete_in(int idx,RedirectAttributes attr) {
+			
+			try { //입고취소
+				invetory_Service.delete_in(idx);
+			} catch (Exception e) {
+				
+				String message = e.getMessage();
+				
+				attr.addAttribute("error", message);
+			}
+			
+			return "redirect:admin_inventory.do";
+		}
+
+   
+    @RequestMapping("delete_out.do")
+    public String delete_out(int idx,RedirectAttributes attr) {
+        
+        try { //출고취소
+            invetory_Service.delete_out(idx);
+        } catch (Exception e) {
+            
+            String message = e.getMessage();
+            
+            attr.addAttribute("error", message);
+        }
+        
+        return "redirect:admin_inventory.do";
+    }	
+    
+    
 
 }

@@ -15,7 +15,6 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
@@ -85,6 +84,13 @@ form.example::after {
 <!-- Header -->
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp"/>
 
+
+
+
+
+
+
+
 <section id="one">
 			<div class="container">
 				<div class="row">
@@ -102,6 +108,7 @@ form.example::after {
 					  	<li><a href="qna.do">1:1문의</a></li>
 
 						<li><a href="reviewer.do">평론가</a></li>
+				
 					</ul>
 					<hr class="hidden-sm hidden-md hidden-lg">
 				  </div>
@@ -111,7 +118,7 @@ form.example::after {
 
 						
 						  <div id="search_box" class="row">
-							<form class="form-inline" action="/action_page.php">  
+							<form class="form-inline">  
 							
 								  <select id="search" name="search" class="form-control">
 									  <option value="all">전체보기</option>
@@ -127,8 +134,6 @@ form.example::after {
 								  <input type="button" value="검색" class="btn btn-success" onclick="find();"> -->
 								<div></div>  
 								<div class="col-sm-8">
-									
-
   									<input type="text" placeholder="검색어를 입력하세요.." name="search">
 						  			<button type="search-bar" class="btn btn-primary">
 									<i class="fa fa-search"></i>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.filmmatch.dao.ReviewerDao">
+	
+	<!-- 페이지에 따른 목록조회 -->
+	<select id="selectList" resultType="reviewer">
+		select * from reviewer
+		 <!-- where community_page = ${community_page}
+		 order by b_ref desc, b_step asc  -->
+	</select>
+
+	<!-- 페이지에 1개 조회 -->
+	<select id="selectOne"  parameterType="int" resultType="reviewer">
+		select * from reviewer where r_idx=#{ r_idx }
+	</select>
+
+	
+	<!-- 평론글남기기(글쓰기) -->
+	<insert id="insert"  parameterType="reviewer">
+       insert into reviewer(r_idx, r_subject, mem_idx, mem_name, r_content, r_regdate) 
+                   values(#{r_idx},#{ r_subject } ,#{ mem_idx },#{ mem_name } , #{ r_content } , now())
+    </insert>
+
+	<!-- 평론글삭제 -->
+    <delete id="delete" parameterType="int">
+       delete from reviewer where r_idx = #{ r_idx }
+    </delete>
+
+	<!-- 평론글수정 -->
+	<update id="update" parameterType="reviewer">
+    
+       update reviewer set r_subject = #{ r_subject },
+                      r_content = #{ r_content },
+                      r_ip = #{ r_ip },
+                      r_regdate=now()
+     where r_idx = #{ r_idx } 
+	 </update>       
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

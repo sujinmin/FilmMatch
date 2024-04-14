@@ -7,7 +7,9 @@
 --><html><head><title>Generic - Introspect by TEMPLATED</title><meta charset="utf-8">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<link rel="stylesheet" href="assets/css/main.css"></head><body>
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
 
 <!-- Header -->
 	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp"/>
@@ -48,4 +50,9 @@
 </section>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/footer.jsp"/>
 <!-- Scripts -->
-<script src="assets/js/jquery.min.js"></script><script src="assets/js/skel.min.js"></script><script src="assets/js/util.js"></script><script src="assets/js/main.js"></script></body></html>
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/skel.min.js"></script>
+<script src="../assets/js/util.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

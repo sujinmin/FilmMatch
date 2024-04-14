@@ -28,6 +28,17 @@
 	    
         location.href="../member/login_form.do?url=" + encodeURIComponent(location.href) ;
  	}
+
+	 function send() {
+		
+		
+		
+		//글쓰기 폼으로 이동
+		location.href="reviewer_form.do"; 
+		
+	}
+
+
  	</script>
 
   <style type="text/css">
@@ -119,6 +130,15 @@ form.example::after {
 					  	<br>
 
 				   <div class="col-sm-8">
+					<!-- 이 if태그는 mem_grade가 "평론가" -->
+					<!-- 123여기는 아무에게나 보이고 -->
+					<c:if test="${ member.mem_grade eq '일반'}">
+    					<p>평론가 전용 페이지입니다.</p>
+						<form>
+							<input type="button" value="글남기기" onclick="send(this.form);">
+						</form>
+					</c:if>
+					
 
 					<table class="table-wrapper"> 
 						<!-- 테이블 헤더 -->
@@ -127,23 +147,29 @@ form.example::after {
 							<th>제목</th>
 							<th>평론가</th>
 							<th>작성일</th>
-							
 							<th>조회수</th>
 						</tr>
 						
 						<!-- 게시글 목록 -->
-						<c:forEach var="vo" items="${list}">
+						<c:forEach var="vo" items="${list}" varStatus="i">
 							
 							<tr>
+
 								<!-- 번호 -->
-								<td class="b_idx">
-									${vo.b_idx}
+								<td>
+									${i.count}
 								</td>                                             
 								
 								<!-- 제목 -->
-								<td class="b_subject">
-								   ${vo.b_subject}
-								</td>
+								<td>
+									<!-- 메인글이 아니면 ㄴ 붙여라 -->
+									<c:if test="${ vo.r_step ne 0 }">ㄴ</c:if><!-- ne = not 이퀄 -->
+					
+									<!-- 사용중 -- 상세페이지로 -->                              
+									<c:if test="${ vo.r_use eq 'y' }">
+									<a href="reviewer_view.do?r_idx=${ vo.r_idx }&page=${ empty param.page ? 1 : param.page }">${ vo.r_subject }</a>
+									</c:if>
+									</td>
 								
 								<!-- 작성자 -->
 								<td class="mem_name">
@@ -151,15 +177,15 @@ form.example::after {
 								</td>
 								
 								<!-- 작성일 -->
-								<td class="b_regdate">
-									${ fn:substring(vo.b_regdate,0,10)}
+								<td class="r_regdate">
+									${ fn:substring(vo.r_regdate,0,10)}
 								</td>
 								
 								
 								
 								<!-- 조회수 -->
-								<td class="b_readhit">
-									${vo.b_readhit}
+								<td class="r_readhit">
+									${vo.r_readhit}
 								</td>
 							</tr>
 						</c:forEach>

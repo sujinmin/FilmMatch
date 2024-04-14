@@ -34,5 +34,6 @@ public class GoodsVo {
     private String reg_date;
     private String mod_date;
     private int no;
+    private String path;
 
 }

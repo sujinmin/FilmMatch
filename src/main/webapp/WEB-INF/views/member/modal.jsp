@@ -88,7 +88,7 @@
           <input type="button" class="btn btn-warning" data-dismiss="modal" value="닫기">
           
         </div>
-      </div>
+    </div>
 
 
 

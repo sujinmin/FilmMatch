@@ -1,5 +1,6 @@
 package com.movie.filmmatch.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +11,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.movie.filmmatch.dao.MemberDao;
+import com.movie.filmmatch.dao.MovieCommentDao;
 import com.movie.filmmatch.service.GoodsService;
+import com.movie.filmmatch.util.Actor1APIUtils;
+import com.movie.filmmatch.util.Actor2APIUtils;
+import com.movie.filmmatch.util.ActorAPIUtils;
 import com.movie.filmmatch.util.IdAPIUtils;
+import com.movie.filmmatch.util.MyConstant;
 import com.movie.filmmatch.util.MyKakaoUtils;
+import com.movie.filmmatch.util.NationAPIUtils;
+import com.movie.filmmatch.util.NewsAPIUtils;
+import com.movie.filmmatch.util.NewsAPIUtils1;
+import com.movie.filmmatch.util.Paging;
+import com.movie.filmmatch.util.PosterAPIUtils;
+import com.movie.filmmatch.util.SearchAPIUtils;
+import com.movie.filmmatch.util.VedioAPIUtils;
+import com.movie.filmmatch.util.genreAPIUtils;
 import com.movie.filmmatch.vo.ActorVo;
 import com.movie.filmmatch.vo.DetailMovieTVVo;
 import com.movie.filmmatch.vo.GoodsVo;
+import com.movie.filmmatch.vo.MemberVo;
+import com.movie.filmmatch.vo.MovieCommentVo;
 import com.movie.filmmatch.vo.NationVo;
 import com.movie.filmmatch.vo.NewsVo;
 import com.movie.filmmatch.vo.PlayingVo;
@@ -48,6 +64,9 @@ public class HomeController{
 
 	@Autowired
 	HttpSession session;
+
+	@Autowired
+	MovieCommentDao mcomment_dao;
 	
 	
 	public HomeController() {
@@ -70,10 +89,10 @@ public class HomeController{
 	public String index(Model model){
 		
 		List<NewsVo> list = null;
-
+		List<NewsVo> amnewlist = null;
 	
 		try {
-			list =NewsAPIController.search_news();
+			list =NewsAPIUtils.search_news();
 		
 
 		} catch (Exception e) {
@@ -81,11 +100,19 @@ public class HomeController{
 			e.printStackTrace();
 		}
 
-	
+		try {
+			amnewlist =NewsAPIUtils1.search_americanews();
+		
+
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+
 
 		List<PosterVo> posterlist = null;
 		try {
-			posterlist =PosterAPIController.search_poster();
+			posterlist =PosterAPIUtils.search_poster();
 			
 
 		} catch (Exception e) {
@@ -96,7 +123,7 @@ public class HomeController{
 	
 		List<PosterVo> votelist = null;
 		try {
-			votelist = PosterAPIController.search_vote();
+			votelist = PosterAPIUtils.search_vote();
 			
 
 		} catch (Exception e) {
@@ -107,7 +134,7 @@ public class HomeController{
 	
 		List<VedioVo> vediolist = null;
 		try {
-			vediolist =  VedioAPIController.search_vedio();
+			vediolist =  VedioAPIUtils.search_vedio();
 			
 
 		} catch (Exception e) {
@@ -127,6 +154,7 @@ public class HomeController{
 		}
 
         model.addAttribute("map", map);
+		model.addAttribute("amnewlist", amnewlist);
 		model.addAttribute("vediolist", vediolist);
 		model.addAttribute("votelist", votelist);
 		model.addAttribute("posterlist", posterlist);
@@ -157,7 +185,7 @@ public class HomeController{
 
 		List<PlayingVo> list = null;
 		try {
-			list = genreAPIController.search_playing();
+			list = genreAPIUtils.search_playing();
 			
 	
 		} catch (Exception e) {
@@ -181,7 +209,7 @@ public class HomeController{
 
 		List<ActorVo> list = null;
 		try {
-			list = ActorAPIController.search_actor();
+			list = ActorAPIUtils.search_actor();
 			
 	
 		} catch (Exception e) {
@@ -191,7 +219,7 @@ public class HomeController{
 
 		List<ActorVo> list1 = null;
 		try {
-			list1 = Actor1APIController.search_actorameri();
+			list1 = Actor1APIUtils.search_actorameri();
 			
 	
 		} catch (Exception e) {
@@ -201,7 +229,7 @@ public class HomeController{
 
 		List<ActorVo> list2 = null;
 		try {
-			list2 = Actor2APIController.search_actorjapan();
+			list2 = Actor2APIUtils.search_actorjapan();
 		
 	
 		} catch (Exception e) {
@@ -225,7 +253,7 @@ public class HomeController{
 
 		List<NationVo> list = null;
 		try {
-			list = NationAPIController.search_nation();
+			list = NationAPIUtils.search_nation();
 			
 		} catch (Exception e) {
 			
@@ -234,6 +262,28 @@ public class HomeController{
 		model.addAttribute("list", list);
 
 		return "main/nation";
+
+	}
+
+
+			/**
+	 * 검색 페이지
+	 * @return
+	 */
+	@RequestMapping("/searchmovie.do")
+	public String searmovie(String query,Model model) {
+
+		List<PosterVo> list = null;
+		try {
+			list = SearchAPIUtils.search_text(query);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		model.addAttribute("list", list);
+
+		return "main/searchmovie";
 
 	}
 
@@ -282,8 +332,13 @@ public class HomeController{
 	 */
 	@RequestMapping("/movieinfo.do")
 	public String movieinfo(String id,String media_type,Model model) {
-
-
+		
+		int sumpoint = 0;
+		try {
+			sumpoint = mcomment_dao.sumpoint(id);
+		} catch (Exception e) {		
+			sumpoint = 0;
+		}
 
 		List<DetailMovieTVVo> list = null;
 		try {
@@ -293,10 +348,16 @@ public class HomeController{
 		} catch (Exception e) {		
 			e.printStackTrace();
 		}
-
+		model.addAttribute("sumpoint", sumpoint);
 		model.addAttribute("list", list);
 		return "main/movieinfo";
 
 	}
 
-}
+
+
+	}
+
+
+
+

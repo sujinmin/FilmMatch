@@ -17,8 +17,6 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 	
@@ -118,13 +116,18 @@ public class MyPageController{
 	 * 주소 등록 폼띄우기
 	 * @return
 	 */
-	@RequestMapping("mypage_myinfo_insert_form.do")
-	public String mypage_myinfo_insert() {
+	@RequestMapping("mypage_myinfo_insert.do")
+	public String mypage_myinfo_insert(Model model) {
 		
-		MemberVo vo = (MemberVo) request.getSession().getAttribute("user");
-		System.out.println(vo);
+		// MemberVo vo = (MemberVo) request.getSession().getAttribute("user");
+		MyInfoVo vo = (MyInfoVo) request.getSession().getAttribute("addr_idx");
 
-		return "member/mypage_myinfo_insert";
+		System.out.println(vo);
+		// System.out.println(vo1);
+		model.addAttribute("vo", vo);
+		
+		
+		return "redirect:member/mypage_myinfo.do";
 	}
 	
 	/**

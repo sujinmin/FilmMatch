@@ -7,8 +7,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 페이지에 따른 목록조회 -->
 	<select id="selectList" resultType="support">
 		select * from support
+		order by b_ref desc, b_step asc 
 		 <!-- where community_page = ${community_page}
 		 order by b_ref desc, b_step asc  -->
+	</select>
+
+	<select id="selectMaxB_idx" resultType="int">
+	    select ifnull(max(b_idx),0) from support
 	</select>
 
 	<!-- 페이지에 1개 조회 -->
@@ -19,14 +24,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 문의하기(글쓰기) -->
 	<insert id="insert"  parameterType="support">
-       insert into support(b_idx, b_subject, mem_idx, mem_name, b_content, b_regdate) 
-                   values(#{b_idx},#{ b_subject } ,#{ mem_idx },#{ mem_name } , #{ b_content } , now())
+       insert into support(b_idx, b_subject, mem_idx, mem_name, b_content, b_regdate,b_ref,b_step,b_depth,b_use) 
+                   values(#{b_idx},#{ b_subject } ,#{ mem_idx },#{ mem_name } , #{ b_content } , now(),#{b_ref},0,0,'y')
     </insert>
 
 	<!-- 문의 글삭제 -->
     <delete id="delete" parameterType="int">
        delete from support where b_idx = #{ b_idx }
     </delete>
+	<!-- 최근 문의글 b_idx를 참조하여  참조글번호 수정 -->
+    <update id="update_b_ref" parameterType="support">
+          update support set b_ref=#{b_ref} 
+		  where  b_idx = #{ b_idx } 
+	</update>
 
 	<!-- 문의 글수정 -->
 	<update id="update" parameterType="support">
@@ -35,8 +45,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                       b_content = #{ b_content },
                       b_ip = #{ b_ip },
                       b_regdate=now()
-     where b_idx = #{ b_idx } 
-	 </update>       
+       where  b_idx = #{ b_idx } 
+	 </update> 
+
+	 <!-- 조회수 증가 -->
+	<update id="update_readhit" parameterType="int">
+		update support set b_readhit = b_readhit+1 where b_idx = #{b_idx}
+	</update>  
+
+	<!-- 답글자리 : 기준글보다 b_step이 큰 게시물의 b_step증가 -->
+	<update id="update_step" parameterType="support">
+		update support set b_step = b_step +1
+			where b_ref=#{ b_ref } and b_step > #{ b_step }
+	</update>
+
+	<!-- 답글쓰기: insert -->
+ 	<insert id="reply" parameterType="support">
+	 	insert into support(
+	 		  b_subject
+	 		, b_content
+	 		, b_ip
+	 		, b_regdate
+	 		, b_ref
+	 		, b_step
+	 		, b_depth
+	 		, b_use
+	 		, mem_idx
+	 		, mem_name
+	 		) values(
+				  #{ b_subject },
+					#{ b_content },
+					#{ b_ip },
+					now(),
+					#{ b_ref },
+					#{ b_step },
+					#{ b_depth },
+					'y',
+				     #{mem_idx},
+				     #{mem_name}
+			)
+
+ 	</insert>
+
+	
+
 
 </mapper>
 

@@ -144,14 +144,17 @@ body {
 					<a href="${pageContext.request.contextPath}/index.do" class="logo"><span class="film">Film</span><span class="flow">Match</span></a>
 					<!-- <nav id="nav"><a href="${pageContext.request.contextPath}/member/login_form.do">LOGIN</a> -->
 					<nav id="nav">
-						<c:if test="${ empty sessionScope.user }">
-							<a href="${pageContext.request.contextPath}/member/login_form.do">LOGIN</a>
-						</c:if>
-						<c:if test="${ ! empty sessionScope.user }">
-							<a href="${pageContext.request.contextPath}/member/logout.do">LOGOUT</a>
-						</c:if>
-						<a href="${pageContext.request.contextPath}/mypage_form.do">MYPAGE</a>
+						<!-- <nav id="nav"><a href="${pageContext.request.contextPath}/member/login_form.do">LOGIN</a> -->
+							<c:if test="${ empty sessionScope.user }">
+								<a href="${pageContext.request.contextPath}/member/login_form.do">LOGIN</a>
+							</c:if>
+							<c:if test="${ ! empty sessionScope.user }">  <span style="color:#33ccff">${user.mem_name}님</span>
+								<a href="${pageContext.request.contextPath}/member/logout.do">LOGOUT</a>
+								<a href="${pageContext.request.contextPath}/mypage_form.do">MYPAGE</a>
+							</c:if>
+						 <c:if test="${ user.mem_grade eq '관리자' }">
                         <a href="${pageContext.request.contextPath}/admin/main.do">ADMIN</a>
+							</c:if>
 						<a href="${pageContext.request.contextPath}/support/home.do">SUPPORT</a>
                         
 					</nav></div>

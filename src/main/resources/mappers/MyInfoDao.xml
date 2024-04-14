@@ -32,12 +32,10 @@ select * from address
 
 <!-- insert -->
 <insert id="insert" parameterType="myinfo">
-insert into address (	mem_idx
-						zipcode,
+insert into address (	zipcode,
 						addr_street,
 						addr_detail) 
-			values	(	#{ mem_idx },
-						#{ zipcode },
+			values	(	#{ zipcode },
 						#{ addr_street },
 						#{ addr_detail }) 
 </insert>
