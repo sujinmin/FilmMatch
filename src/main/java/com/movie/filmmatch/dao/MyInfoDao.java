@@ -13,7 +13,7 @@ public interface MyInfoDao {
 
 	public MyInfoVo selectOneList(int mem_idx);
 	
-	public MyInfoVo selectOneAddr(String addr_idx);
+	public MyInfoVo selectOneAddr(int addr_idx);
 
 	public int insert(MyInfoVo vo);
 

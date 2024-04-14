@@ -31,6 +31,14 @@
     color: black;
     font-weight: bold;
     }
+    #addr_add_btn{
+        display: none;
+    }
+    #addr_update_btn{
+        display: none;
+
+    }
+
  </style>
 <script type="text/javascript">
 
@@ -88,8 +96,6 @@
 	//이메일 정규식 2번 중첩되어 var로 변경
 	var regular_email = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 	var regula_phone = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
-
-    //var mem_birth = document.getElementById("mem_birth").value;
 
 	function send(send_form) {
 		//폼에서 입력된값 체크...
@@ -150,109 +156,149 @@
         
         if (confirm("정말 수정하시겠습니까?")) {
             send_form.action = "myinfo_modify.do";
-                send_form.submit(); //전송	
+            send_form.submit(); //전송	
             }else {
                 return false; // 수정 취소 시 전송하지 않음
         }
 	}
 
     
-    function addr_add() {
-    document.getElementById('#addr_add_btn').style.display = 'block';
+    function addr_add() {// 주소 입력창이 보여진다
+        var addrAddBtn = document.getElementById('addr_add_btn');
+ 
+        if (addrAddBtn.style.display === 'none') {
+            addrAddBtn.style.display = 'table-row';
+            
+            var add_zipcode = $("#add_zipcode");
+            add_zipcode.click(find_addr_add); //우편번호 클릭시 #find_addr_add 활성화
+
+        } else {
+            addrAddBtn.style.display = 'none';
+        }
     }
-    
 
-    function addr_insert() { // insert버튼
-
-        location.href='insert.do'
-        
-    }
-
-    function find_addr_add() {
+    function find_addr_add() {// 주소창에서 선택된 주소값을 입력창에 넣어준다
 		new daum.Postcode({
 	        oncomplete: function(data) { //json
-	        	//data = {"zonecode":"13529", "address":"경기 성남시 분당구",..."}
-	        	// 주소창에서 선택된 주소값을 입력창에 넣어준다
-	        	$("#zipcode").val(data.zonecode);
-	        	$("#addr_street").val(data.roadAddress);
+	        	$("#add_zipcode").val(data.zonecode);
+	        	$("#add_addr_street").val(data.roadAddress);
 	        
 	        }
 	    }).open();
-	} //end: fine_addr()
+	} //end: fine_addr()    
+
+    function addr_insert(add_form) { // insert 버튼
+        
+        console.log(add_form);
+        //var form = document.getElementById(add_form);
+        
+        let add_zipcode      = add_form.add_zipcode.value;
+		let add_addr_street  = add_form.add_addr_street.value;
+		let add_addr_detail  = add_form.add_addr_detail.value;
+		
+		if (add_zipcode=='') {
+			alert('우편번호을 입력해주세요!')
+			add_form.add_zipcode.value='';
+			add_form.add_zipcode.focus();
+			return;
+		}
+		if (add_addr_street=='') {
+			alert('주소을 입력 해주세요!')
+			add_form.add_addr_street.value='';
+			add_form.add_addr_street.focus();
+			return;
+		}
+		if (add_addr_detail=='') {
+			alert('상세주소를 입력 해주세요!')
+			add_form.add_addr_detail.value='';
+			add_form.add_addr_detail.focus();
+			return;
+		}
+
+
+        if (add_form) {
+            console.log(add_form);
+            if(confirm("주소를 등록하시겠습니까?")==false) return;
+            
+            location.href = 'addr_insert.do';
+            add_form.submit(); //전송	
+
+        } else {
+            console.error('주소등록을 실패하셨습니다.');
+        }
+    }
+
+    function update_addr_form(addr_idx) { //addr_idx 주소 수정 폼 띄우기
+        var addrUpdateBtn = document.getElementById('addr_update_btn'+ addr_idx);
+
+        if (addrUpdateBtn.style.display === 'none') {
+                addrUpdateBtn.style.display = 'table-row';
+                
+                var update_zipcode = $("#update_zipcode");
+                update_zipcode.click(find_addr_update); //우편번호 클릭시 #find_addr_update 활성화
+
+            } else {
+                addrUpdateBtn.style.display = 'none';
+            }
+    }
+
+    function find_addr_update() {// 주소창에서 선택된 주소값을 입력창에 넣어준다
+		new daum.Postcode({
+	        oncomplete: function(data) { //json
+	        	$("#update_zipcode").val(data.zonecode);
+	        	$("#update_addr_street").val(data.roadAddress);
+	        
+	        }
+	    }).open();
+	} //end: find_addr_update()    
+
+    function addr_update(update_form) {
+
+        console.log("update_form 들어옴!!");
+        console.log(update_form);
+        //var form = document.getElementById(add_form);
+        
+        let update_zipcode      = update_form.update_zipcode.value;
+		let update_addr_street  = update_form.update_addr_street.value;
+		let update_addr_detail  = update_form.update_addr_detail.value;
+		
+		if (update_zipcode=='') {
+			alert('우편번호을 입력해주세요!')
+			update_form.update_zipcode.value='';
+			update_form.update_zipcode.focus();
+			return;
+		}
+		if (update_addr_street=='') {
+			alert('주소을 입력 해주세요!')
+			update_form.update_addr_street.value='';
+			update_form.update_addr_street.focus();
+			return;
+		}
+		if (update_addr_detail=='') {
+			alert('상세주소를 입력 해주세요!')
+			update_form.update_addr_detail.value='';
+			update_form.update_addr_detail.focus();
+			return;
+		}
+
+
+        if (update_form) {
+            console.log(update_form);
+            if(confirm("주소를 수정하시겠습니까?")==false) return;
+            
+            location.href = 'addr_update.do';
+            update_form.submit(); //전송	
+
+        } else {
+            console.error('주소수정을 실패하셨습니다.');
+        }
+        
+    }
+
+
   	
 
-    function updateAddress(addr_idx) {
-        
-            $.ajax({
-            	  url		:	"addr_update_form.do",
-            	  data		:	{"addr_idx":addr_idx},
-            	  dataType	:	"json",
-            	  success	:	function(res_data){
-                		  //res_data={"p_idx":1,"p_subject":"제목","p_content":"내용","mem_idx":3}
-                		 // MyInfoVo(no=1, mem_idx=9, addr_idx=11, zipcode=9999, addr_street=9999testtesttest, addr_detail=testtest)
-                         console.log("_________________");
-                            console.log(res_data);
-                            console.log("_________________");
 
-                            modal_no = res_data.no;
-                            modal_addr_idx = res_data.addr_idx;
-                            modal_zipcode = res_data.zipcode;
-                            modal_addr_street = res_data.addr_street;
-                            modal_addr_detail = res_data.addr_detail;
-    
-    
-			   //팝업창(Modal)
-            $("#myModal").modal({ backdrop: "static" });
-            $("#popup_addr_idx").html(modal_addr_idx);
-            $("#popup_no").html(modal_no);
-            $("#popup_zipcode").html("우편번호 : " + modal_zipcode);
-            $("#popup_addr_street").html("주소 : " + modal_addr_street);
-            $("#popup_addr_detail").html("상세 주소 : " + modal_addr_detail);
-        },
-		  error		:	function(err){
-			  alert(err.responseText);
-              console.log(err);
-		  }
-    
-	  });//end:ajax
-    }
-    
-    
-    function updateAddress(addr_idx) {
-        
-            $.ajax({
-            	  url		:	"addr_update.do",
-            	  data		:	{"addr_idx":addr_idx},
-            	  dataType	:	"json",
-            	  success	:	function(res_data){
-                		  //res_data={"p_idx":1,"p_subject":"제목","p_content":"내용","mem_idx":3}
-                		 // MyInfoVo(no=1, mem_idx=9, addr_idx=11, zipcode=9999, addr_street=9999testtesttest, addr_detail=testtest)
-                
-             modal_no = res_data.no;
-			modal_addr_idx = res_data.addr_idx;
-			modal_zipcode = res_data.zipcode;
-			modal_addr_street = res_data.addr_street;
-			modal_addr_detail = res_data.addr_detail;
-    
-    
-			   //팝업창(Modal)
-			   $("#myModal").modal({backdrop: "static" });
-			 
-			   $("#popup_addr_idx").html(modal_addr_idx);
-			   $("#popup_no").html(modal_no);
-			   $("#popup_zipcode").html("우편번호 : " + modal_zipcode );
-			   $("#popup_addr_street").html("주소 : " + modal_addr_street );
-			   $("#popup_addr_detail").html("상세 주소 : " + modal_addr_detail );
-    
-		  },
-		  error		:	function(err){
-			  alert(err.responseText);
-		  }
-    
-	  });//end:ajax
-    }
-    
-    
     function deleteAddress(addrIdx,No) {
         if (confirm( No + "번 주소를 삭제하시겠습니까?")==false) return;
             
@@ -262,8 +308,9 @@
 </head>
 <body>
 
-<!-- Header -->
-<!-- <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp"/> -->
+
+
+
 <%@include file="../main/header.jsp" %>
 
 
@@ -380,36 +427,37 @@
 
         <h2>나의 주소목록</h2>
 
-        <form>
-            <table>
-                <!-- <input type="button" id="addr_add" value="주소추가" onclick="insert_address('${vo.mem_idx}');"> -->
-                <input type="button" id="addr_add" value="주소추가" onclick="addr_add();">
+        <table>
+            <!-- <input type="button" id="addr_add" value="주소추가" onclick="insert_address('${vo.mem_idx}');"> -->
+            <input type="button" value="주소추가" onclick="addr_add();">
                 <tr>
-                    <th colspan="5"><b>${vo.mem_name}</b>주소목록</th>
-                    
+                    <th colspan="5"><b>${vo.mem_name}</b>주소목록</th>  
                 </tr>
-                <tr id="addr_add_btn" style="display: none;">
+                <tr id="addr_add_btn">
                     <th colspan="2">
                         <h4> 주소등록 :</h4>
                     </th>
+                    <form id="addr_add_insert">
                     <td colspan="3">
+                        <input type="hidden" name="mem_idx"  value="${ vo.mem_idx }">
                         <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
-                            <input class="form-control" type="text" name="zipcode" id="zipcode" value="${ zipcode }">
+                            <input class="form-control" type="text" name="zipcode" id="add_zipcode" placeholder="우편번호">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr_add();">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
-                        <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
-                            <input class="form-control" type="text" name="addr_street"  id="addr_street" size="50" value="${ addr_street }">
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="text" id="addr_detail" value="${addr_detail}" placeholder="상세주소를 입력해주세요." >
-                        </div>
-                        <input type="button" id="addr_insert" value="입력" onclick="addr_insert(this.form);" >
-                    </td>
-                    
+                            <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
+                                <input class="form-control" type="text" name="addr_street"  id="add_addr_street" size="50" placeholder="주소">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="text" name="addr_detail" id="add_addr_detail" placeholder="상세주소를 입력해주세요." >
+                            </div>
+                            <input type="button" id="" value="입력" onclick="addr_insert(this.form);">
+                        </td>
+                    </form> 
                 </tr>
                 
+            <form><!-- update와 delete폼 -->
                 <tr>
                     <th>번호</th>
                     <th>우편번호</th>
@@ -420,7 +468,7 @@
 
                 <c:forEach items="${ list }" var="list">
                     <tr>
-                        <!-- <td>${list.no}</td> -->
+                       
                         <td>${list.no}
                             <!-- <input type="hidden" id="addr_idx" value="${ list.addr_idx }"> -->
                         </td> <!-- 번호를 순서대로 표시 -->
@@ -428,10 +476,32 @@
                         <td>${list.addr_street}</td>
                         <td>${list.addr_detail}</td>
                         <td>
-                            <input class="button alt" id="addr_update" type="button" value="수정" onclick="updateAddress('${list.addr_idx}');">
+                            <input class="button alt" id="update_addr_form" type="button" value="수정" onclick="update_addr_form('${list.addr_idx}');">
                             <input class="button alt" type="button" value="삭제" onclick="deleteAddress('${list.addr_idx}', '${list.no}');">
                         </td>
 
+                    </tr>
+                    <tr id="addr_update_btn">
+                        <th colspan="2">
+                            <h4> 주소 수정 :</h4>
+                        </th>
+                        <form id="addr_update">
+                        <td colspan="3">
+                            <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
+                                <input class="form-control" type="text" name="zipcode" id="update_zipcode" value="${ list.zipcode }">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr_update();">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                                <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
+                                    <input class="form-control" type="text" name="addr_street"  id="update_addr_street" size="50" value="${ list.addr_street }">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="text" name="addr_detail" id="update_addr_detail" value="${ list.addr_detail }">
+                                </div>
+                                <input type="button" id="" value="입력" onclick="addr_update(this.form);">
+                            </td>
+                        </form> 
                     </tr>
                 </c:forEach>
                 
@@ -444,9 +514,9 @@
                     </tr>	
                 </c:if>
 
-            </table>
+            </form><!-- update와 delete폼 -->
+        </table>
 
-        </form>
 
 
 

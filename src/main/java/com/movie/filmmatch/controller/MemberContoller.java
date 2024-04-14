@@ -229,11 +229,8 @@ public class MemberContoller {
 	@ResponseBody
     public Map<String,String> sendEmail(String email) {
 
-		//String randomCode = EmailService.generateRandomCode();
-		
         String randomCode = EmailService.sendEmail(email);
-		//session.setAttribute("randomCode", randomCode);
-		//System.out.println("랜덤코드"+randomCode);
+		
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("randomCode", randomCode);
 	

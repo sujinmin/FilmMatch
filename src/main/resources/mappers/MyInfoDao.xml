@@ -27,15 +27,16 @@ select * from address
 <select id="selectOneAddr" parameterType="int" resultType="myinfo">
 select * from address
 	where addr_idx=#{ addr_idx }
-	order by addr_idx
 </select>
 
 <!-- insert -->
 <insert id="insert" parameterType="myinfo">
-insert into address (	zipcode,
+insert into moviedb.address (	mem_idx,
+						zipcode,
 						addr_street,
 						addr_detail) 
-			values	(	#{ zipcode },
+			values	(	#{ mem_idx },
+						#{ zipcode },
 						#{ addr_street },
 						#{ addr_detail }) 
 </insert>
