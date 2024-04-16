@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.movie.filmmatch.dao.ReviewerDao">
+<mapper namespace="com.movie.filmmatch.support.dao.ReviewerDao">
 	
 	<!-- 페이지에 따른 목록조회 -->
 	<select id="selectList" resultType="reviewer">

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.movie.filmmatch.dao.CategoriesDao">
+<mapper namespace="com.movie.filmmatch.goods.dao.CategoriesDao">
 <!-- 카테고리 분류조회 (계층형 쿼리)
 카테고리id 카테고리 명 카테고리 상위 id
 100	      문구류	

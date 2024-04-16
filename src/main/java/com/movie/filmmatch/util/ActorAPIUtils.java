@@ -11,9 +11,9 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.movie.filmmatch.vo.ActorVo;
-import com.movie.filmmatch.vo.ActorprofVo;
-import com.movie.filmmatch.vo.KnownforVo;
+import com.movie.filmmatch.movieapi.vo.ActorVo;
+import com.movie.filmmatch.movieapi.vo.ActorprofVo;
+import com.movie.filmmatch.movieapi.vo.KnownforVo;
 
 
 public class ActorAPIUtils {

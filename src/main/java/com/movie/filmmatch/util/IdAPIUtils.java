@@ -11,8 +11,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.movie.filmmatch.vo.CompanyVo;
-import com.movie.filmmatch.vo.DetailMovieTVVo;
+import com.movie.filmmatch.movieapi.vo.CompanyVo;
+import com.movie.filmmatch.movieapi.vo.DetailMovieTVVo;
 
 
 public class IdAPIUtils {

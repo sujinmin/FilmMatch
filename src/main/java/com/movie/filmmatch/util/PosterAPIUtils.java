@@ -12,8 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.movie.filmmatch.vo.PosterVo;
-import com.movie.filmmatch.vo.VedioVo;
+import com.movie.filmmatch.movieapi.vo.PosterVo;
+import com.movie.filmmatch.movieapi.vo.VedioVo;
 
 
 

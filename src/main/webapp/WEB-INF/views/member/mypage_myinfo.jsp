@@ -35,7 +35,7 @@
         display: none;
     }
     #addr_update_btn{
-        display: none;
+        /* display: none; */
 
     }
 
@@ -84,7 +84,7 @@
      function find_addr() {
 		new daum.Postcode({
 	        oncomplete: function(data) { //json
-	        	//data = {"zonecode":"13529", "address":"경기 성남시 분당구",..."}
+	        	
 	        	// 주소창에서 선택된 주소값을 입력창에 넣어준다
 	        	$("#mem_zipcode").val(data.zonecode);
 	        	$("#mem_addr").val(data.roadAddress);
@@ -189,7 +189,7 @@
 
     function addr_insert(add_form) { // insert 버튼
         
-        console.log(add_form);
+        //console.log("여기야 : " + add_form);
         //var form = document.getElementById(add_form);
         
         let add_zipcode      = add_form.add_zipcode.value;
@@ -217,10 +217,11 @@
 
 
         if (add_form) {
-            console.log(add_form);
+            // console.log("여기야2"+add_form);
             if(confirm("주소를 등록하시겠습니까?")==false) return;
             
-            location.href = 'addr_insert.do';
+            //location.href = 'addr_insert.do';
+            add_form.action = 'addr_insert.do';
             add_form.submit(); //전송	
 
         } else {
@@ -229,16 +230,20 @@
     }
 
     function update_addr_form(addr_idx) { //addr_idx 주소 수정 폼 띄우기
-        var addrUpdateBtn = document.getElementById('addr_update_btn'+ addr_idx);
+        //console.log("수정버튼 클릭!"+ addr_idx);
 
-        if (addrUpdateBtn.style.display === 'none') {
-                addrUpdateBtn.style.display = 'table-row';
+        // var addr_update_btn = document.getElementById('addr_update_btn');
+        // var addr_update_btn = document.getElementById('addr_update_btn_${myinfo_list.addr_idx}');
+        var addr_update_btn = document.getElementById('addr_update_btn_'+ addr_idx);
+
+        if (addr_update_btn.style.display === 'none') {
+            addr_update_btn.style.display = 'table-row';
                 
                 var update_zipcode = $("#update_zipcode");
                 update_zipcode.click(find_addr_update); //우편번호 클릭시 #find_addr_update 활성화
 
             } else {
-                addrUpdateBtn.style.display = 'none';
+                addr_update_btn.style.display = 'none';
             }
     }
 
@@ -254,8 +259,9 @@
 
     function addr_update(update_form) {
 
-        console.log("update_form 들어옴!!");
-        console.log(update_form);
+        // console.log("update_form 들어옴!!");
+        console.log("수정하기 버튼 들어옴????"+update_form);
+        console.log("addr_idx 값>???"+update_form.addrIdx);
         //var form = document.getElementById(add_form);
         
         let update_zipcode      = update_form.update_zipcode.value;
@@ -283,10 +289,10 @@
 
 
         if (update_form) {
-            console.log(update_form);
+            // console.log("여기야4!!!!"+update_form);
             if(confirm("주소를 수정하시겠습니까?")==false) return;
             
-            location.href = 'addr_update.do';
+            update_form.action = 'addr_update.do';
             update_form.submit(); //전송	
 
         } else {
@@ -441,16 +447,16 @@
                     <td colspan="3">
                         <input type="hidden" name="mem_idx"  value="${ vo.mem_idx }">
                         <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
-                            <input class="form-control" type="text" name="zipcode" id="add_zipcode" placeholder="우편번호">
+                            <input class="form-control" type="text" name="zipcode" id="add_zipcode" value="${ list.zipcode }">
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr_add();">
+                            <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr_add('${list.addr_idx}');">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                             <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
-                                <input class="form-control" type="text" name="addr_street"  id="add_addr_street" size="50" placeholder="주소">
+                                <input class="form-control" type="text" name="addr_street"  id="add_addr_street" size="50" value="${ list.addr_street }">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="text" name="addr_detail" id="add_addr_detail" placeholder="상세주소를 입력해주세요." >
+                                <input type="text" name="addr_detail" id="add_addr_detail" value="${ list.addr_detail }" >
                             </div>
                             <input type="button" id="" value="입력" onclick="addr_insert(this.form);">
                         </td>
@@ -466,38 +472,41 @@
                     <th>편집</th>
                 </tr>
 
-                <c:forEach items="${ list }" var="list">
+                <c:forEach items="${myinfo}" var="myinfo_list">
                     <tr>
                        
-                        <td>${list.no}
-                            <!-- <input type="hidden" id="addr_idx" value="${ list.addr_idx }"> -->
+                        <td>${myinfo_list.no}
+                            <!-- <input type="hidden" id="addr_idx" value="${ myinfo_list.addr_idx }"> -->
                         </td> <!-- 번호를 순서대로 표시 -->
-                        <td>${list.zipcode}</td> <!-- 게시물 제목 -->
-                        <td>${list.addr_street}</td>
-                        <td>${list.addr_detail}</td>
+                        <td>${myinfo_list.zipcode}</td>
+                        <td>${myinfo_list.addr_street}</td>
+                        <td>${myinfo_list.addr_detail}</td>
                         <td>
-                            <input class="button alt" id="update_addr_form" type="button" value="수정" onclick="update_addr_form('${list.addr_idx}');">
-                            <input class="button alt" type="button" value="삭제" onclick="deleteAddress('${list.addr_idx}', '${list.no}');">
+                            <input class="button alt" type="button" value="수정" onclick="update_addr_form('${myinfo_list.addr_idx}');">
+                            <input class="button alt" type="button" value="삭제" onclick="deleteAddress('${myinfo_list.addr_idx}', '${myinfo_list.no}');">
                         </td>
 
                     </tr>
-                    <tr id="addr_update_btn">
+                    <!-- <tr id="addr_update_btn" > -->
+                    <tr id="addr_update_btn_${myinfo_list.addr_idx}" style="display: none;">
+
                         <th colspan="2">
                             <h4> 주소 수정 :</h4>
                         </th>
                         <form id="addr_update">
                         <td colspan="3">
+                            <input type="hidden" id="addr_idx" name="addr_idx" value="${ myinfo_list.addr_idx }">
                             <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
-                                <input class="form-control" type="text" name="zipcode" id="update_zipcode" value="${ list.zipcode }">
+                                <input class="form-control" type="text" name="zipcode" id="update_zipcode" value="${ myinfo_list.zipcode }">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr_update();">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                             </div>
                                 <div style="display: inline-flex; align-items: center; margin-bottom: 10px;">
-                                    <input class="form-control" type="text" name="addr_street"  id="update_addr_street" size="50" value="${ list.addr_street }">
+                                    <input class="form-control" type="text" name="addr_street"  id="update_addr_street" size="50" value="${ myinfo_list.addr_street }">
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="text" name="addr_detail" id="update_addr_detail" value="${ list.addr_detail }">
+                                    <input type="text" name="addr_detail" id="update_addr_detail" value="${ myinfo_list.addr_detail }">
                                 </div>
                                 <input type="button" id="" value="입력" onclick="addr_update(this.form);">
                             </td>
@@ -506,7 +515,7 @@
                 </c:forEach>
                 
                 <!-- 게시물이 없는경우 -->
-                <c:if test="${ empty list }"> <!-- request Binding에서 줌 -->
+                <c:if test="${ empty myinfo }"> <!-- request Binding에서 줌 -->
                     <tr>
                         <td colspan="5" align="center">
                             <font color="red">등록된 주소가 없습니다.</font>

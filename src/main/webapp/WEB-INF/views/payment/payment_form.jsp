@@ -65,7 +65,19 @@ if(amount<30000) {
 $(document).ready(function() {
 
 
+ $("select[name='paymentId']").change(function() {
+            var selectedOption = $(this).find("option:selected");
+            var addrDetailValue = selectedOption.text();
+            var zipcodeValue = selectedOption.val();
 
+            if (zipcodeValue === "${user.mem_addr}") {
+                $("#pay_addr").val("${user.mem_addr}");
+                $("#pay_zipcode").val("${user.mem_zipcode}");
+            } else {
+                $("#pay_addr").val(addrDetailValue);
+                $("#pay_zipcode").val(zipcodeValue);
+            }
+        });
 	
 	$('[id^="goods_name_"]').each(function() {
     		goodsNames.push($(this).val());
@@ -258,7 +270,24 @@ $(document).ready(function() {
 					<table class="table table-wrapper">
 						<tr>
 							<th><label>우편번호</label></th>
-							<td><input class="form-control" name="pay_zipcode" id="pay_zipcode" value="${user.mem_zipcode}"> <input class="button special small" type="button" value="주소검색" onclick="find_addr();"></td>
+							
+							<td>
+							
+							<select name="paymentId" style="width:300px;">
+							<option value="${user.mem_addr}">기본주소</option>
+   							 <c:forEach var="myinfo" items="${myinfo_list}" >
+        					<option value="${myinfo.zipcode}">${myinfo.addr_street} ${myinfo.addr_detail}</option>
+  							</c:forEach>
+							</select>	
+							<br>
+							<input class="form-control" name="pay_zipcode" id="pay_zipcode" value="${user.mem_zipcode}"> 
+							
+
+
+
+							<input class="button special small" type="button" value="주소검색" onclick="find_addr();">
+							
+							</td>
 						</tr>
 						<tr>
 							<th><label>배송지</label></th>

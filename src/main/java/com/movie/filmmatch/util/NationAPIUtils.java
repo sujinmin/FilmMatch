@@ -11,7 +11,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.movie.filmmatch.vo.NationVo;
+import com.movie.filmmatch.movieapi.vo.NationVo;
 
 public class NationAPIUtils {
 	

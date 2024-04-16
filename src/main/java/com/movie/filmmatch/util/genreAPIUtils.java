@@ -11,8 +11,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.movie.filmmatch.vo.CraditeVo;
-import com.movie.filmmatch.vo.PlayingVo;
+import com.movie.filmmatch.movieapi.vo.CraditeVo;
+import com.movie.filmmatch.movieapi.vo.PlayingVo;
 
 
 

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.movie.filmmatch.dao.PaymentDao">
+<mapper namespace="com.movie.filmmatch.payment.dao.PaymentDao">
 
 <!-- 결제정보 인서트 -->
 <insert id="insert_payment_success" parameterType="map">

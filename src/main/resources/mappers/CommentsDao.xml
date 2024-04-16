@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.movie.filmmatch.dao.CommentsDao">
+<mapper namespace="com.movie.filmmatch.support.dao.CommentsDao">
 
 <!-- 전체조회 : b_idx의 댓글들 -->
  	<select id="selectList" parameterType="int" resultType="comments">

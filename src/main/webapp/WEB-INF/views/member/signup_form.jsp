@@ -244,6 +244,15 @@ th {
      
 
     function enableSignupButton() {
+        // const mem_name = document.getElementById("mem_name").value.trim();
+        // const mem_id = document.getElementById("mem_id").value.trim();
+        // const mem_pwd = document.getElementById("mem_pwd").value.trim();
+        // const mem_email = document.getElementById("mem_email").value;
+        // const mem_zipcode = document.getElementById("zipcode").value;
+        // const mem_addr = document.getElementById("addr").value;
+        // const check_pwd = document.getElementById("check_pwd").value;
+
+       // const isValidEmail = validateEmail(mem_email);
 
         if (mem_name && mem_id && mem_pwd && mem_birth && mem_gender && mem_email && mem_phone && mem_zipcode && mem_addr ) {
             // 모든 필수 입력란에 값이 있고 올바른 이메일 형식이라면 회원가입 버튼 활성화

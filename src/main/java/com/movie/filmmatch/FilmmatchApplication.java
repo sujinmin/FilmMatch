@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @MapperScan(basePackages = "com.movie.filmmatch", annotationClass = Mapper.class)  
 public class FilmmatchApplication {
-
+ 
 	public static void main(String[] args) {
 		SpringApplication.run(FilmmatchApplication.class, args);
 	}

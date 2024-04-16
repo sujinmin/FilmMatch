@@ -117,15 +117,18 @@ function kakaoLogout() {
 
   // 카카오 로그인 함수
   function kakaoLogin() {
+    if(confirm("14세 이상에 동의합니다.")==false) return;
       Kakao.Auth.login({
           success: function (response) {
+            console.log(response);
               // 카카오 로그인 성공 시 사용자 정보를 요청
-              Kakao.API.request({
-                  url: '/v2/user/me',
-                  success: function (response) {
+              Kakao.API.request({   url: '/v2/user/me',
+                                    success: function (response) 
+                    {
                       // 로그인 성공 시 사용자 정보를 서버로 전송하는 함수 호출
                       sendUserInfoToServer(response);
                     },
+                    
                     fail: function (error) {
                       console.log('카카오 사용자 정보 요청 실패:', error);
                     }
@@ -135,7 +138,7 @@ function kakaoLogout() {
           fail: function (error) {
               console.log('카카오 로그인 실패:', error);
               alert("카카오 로그인 실패");
-          }
+        }
       });
   }
   
@@ -225,8 +228,12 @@ function kakaoLogout() {
             
         <!-- kakao button -->
         <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-
-            <a onclick="kakaoLogin();" href="javascript:void(0)"><img src="../image/kakao_login.png" /></a>
+            
+            <div  style="text-align: center; " >
+            <a onclick="kakaoLogin();" href="javascript:void(0)" >
+                <img src="../image/kakao_login.png"/>
+            </a>
+            </div>
 
         
             <!-- <button onclick="kakaoLogin();">
@@ -235,16 +242,16 @@ function kakaoLogout() {
               </a>
             </button> -->
 
-            <div onclick="kakaoLogout();">
+            <!-- <div onclick="kakaoLogout();">
               <a href="javascript:void(0)">
                   <span>카카오 로그아웃</span>
               </a>
-            </div>
+            </div> -->
 
         
         <!-- <button class="kakao__btn " onclick="send(this.form);">
             <i class="fab fa-kakao"></i>
-            logi in with Kakao
+            login in with Kakao
         </button> -->
 
     </div>
