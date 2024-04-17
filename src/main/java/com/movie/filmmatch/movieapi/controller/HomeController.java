@@ -1,6 +1,5 @@
 package com.movie.filmmatch.movieapi.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,16 +21,15 @@ import com.movie.filmmatch.movieapi.vo.PlayingVo;
 import com.movie.filmmatch.movieapi.vo.PosterVo;
 import com.movie.filmmatch.movieapi.vo.TheaterVo;
 import com.movie.filmmatch.movieapi.vo.VedioVo;
+import com.movie.filmmatch.support.dao.FaqDao;
+import com.movie.filmmatch.support.vo.FaqVo;
 import com.movie.filmmatch.util.Actor1APIUtils;
 import com.movie.filmmatch.util.Actor2APIUtils;
 import com.movie.filmmatch.util.ActorAPIUtils;
 import com.movie.filmmatch.util.IdAPIUtils;
-import com.movie.filmmatch.util.MyConstant;
 import com.movie.filmmatch.util.MyKakaoUtils;
 import com.movie.filmmatch.util.NationAPIUtils;
 import com.movie.filmmatch.util.NewsAPIUtils;
-import com.movie.filmmatch.util.NewsAPIUtils1;
-import com.movie.filmmatch.util.Paging;
 import com.movie.filmmatch.util.PosterAPIUtils;
 import com.movie.filmmatch.util.SearchAPIUtils;
 import com.movie.filmmatch.util.VedioAPIUtils;
@@ -65,6 +63,9 @@ public class HomeController{
 
 	@Autowired
 	MovieCommentDao mcomment_dao;
+
+	@Autowired
+	FaqDao faq_dao;
 	
 	
 	public HomeController() {
@@ -87,8 +88,20 @@ public class HomeController{
 	public String index(Model model){
 		
 		List<NewsVo> list = null;
-		List<NewsVo> amnewlist = null;
+		List<FaqVo> faq_list = null;
 	
+
+		try {
+			faq_list = faq_dao.selectList(3);
+		
+
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+
+
+
 		try {
 			list =NewsAPIUtils.search_news();
 		
@@ -98,14 +111,7 @@ public class HomeController{
 			e.printStackTrace();
 		}
 
-		try {
-			amnewlist =NewsAPIUtils1.search_americanews();
-		
-
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
+	
 
 
 		List<PosterVo> posterlist = null;
@@ -150,9 +156,8 @@ public class HomeController{
 			
 			e.printStackTrace();
 		}
-
+		model.addAttribute("faq_list", faq_list);
         model.addAttribute("map", map);
-		model.addAttribute("amnewlist", amnewlist);
 		model.addAttribute("vediolist", vediolist);
 		model.addAttribute("votelist", votelist);
 		model.addAttribute("posterlist", posterlist);

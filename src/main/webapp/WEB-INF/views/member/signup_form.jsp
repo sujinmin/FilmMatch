@@ -288,7 +288,7 @@ th {
         <!-- Form -->
         <form>
             <!-- ID input : first-input input__block first-input__block -->
-            <input type="hidden" id="${ param.ID }" name="${ param.ID }">
+            <input type="hidden" name="kakaoid" value="${ param.kakaoid }">
             <!-- <input type="hidden" id="kakaoUserInfo" value="${kakaoUserInfo}"> -->
             <input type="hidden" name="policy_a" value="${ param.policy_a}">
             <input type="hidden" name="policy_b" value="${ param.policy_b}">

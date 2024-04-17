@@ -171,14 +171,14 @@
 		</article></div> 
 
 		<div id="ta3">
-		[극장 뉴스]
+		[자주 찾는 질문]
 		<br><br>	
 		<article >
-		<c:forEach var="vo"  items="${ amnewlist }" >
+		<c:forEach var="vo"  items="${ faq_list }" >
 	   		<div id="newsbox2">
-            <div id="newstitle2"><a href="${vo.link}">${ vo.title }</a></div>
-            <div id="newsdes2">${ vo.description }</div>
-            <div id="newsdata2">${ fn:substring(vo.pubDate,0,25) }</div>
+            <div id="newstitle2"><a href="support/faq_view.do?f_idx=${vo.f_idx}">${ vo.f_subject }</a></div>
+            <div id="newsdes2">${ vo.f_content }</div>
+            <div id="newsdata2">${ vo.f_regdate }</div>
 			</div>
       	</c:forEach>
 		</article>

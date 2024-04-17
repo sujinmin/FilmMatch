@@ -88,9 +88,9 @@
     
                         <li><a href="faq.do">자주찾는질문</a></li>
     
-                        <li><a href="qna.do">1:1문의</a></li>
+                        <li class="active"><a href="qna.do">1:1문의</a></li>
     
-                        <li class="active"><a href="reviewer.do">평론가</a></li>
+                        <li><a href="reviewer.do">평론가</a></li>
                     </ul>
                     <hr class="hidden-sm hidden-md hidden-lg">
                 </div>

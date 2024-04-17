@@ -18,6 +18,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<select id="selectOneFromId" parameterType="String" resultType="member">
  		select * from member where mem_id = #{ mem_id }
  	</select>
+	<!-- kakaoid로 조회 -->
+ 	<select id="selectkakaoId" parameterType="String" resultType="member">
+ 		select * from member where kakaoid = #{ kakaoid }
+ 	</select>
  	
   	<!-- insert -->
   	<insert id="insert" parameterType="member">
@@ -32,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 							mem_zipcode,
 							mem_addr,
 							mem_ip,
+							kakaoid,
 							policy_a,
 							policy_b) 
 		values(#{ mem_name },
@@ -44,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{ mem_zipcode },
 				#{ mem_addr },
 				#{ mem_ip },
+				#{ kakaoid },
 				#{ policy_a },
 				#{ policy_b })
   	</insert>

@@ -45,6 +45,45 @@
 						/* 아래쪽으로 간격을 벌립니다. */
 					}
 
+					#box {
+						width: auto;
+						height: auto;
+
+					}
+
+					#subject,#regdate {
+
+						border: 1px solid #cccccc;
+						box-shadow: 1px 1px 1px gray;
+						padding: 3px;
+						margin-bottom: 5px;
+					}
+
+					#content {
+						/* id는 '#'class는 '.' */
+						min-height: 120px;
+						border: 1px solid #cccccc;
+						box-shadow: 1px 1px 1px gray;
+						padding: 3px;
+						margin-bottom: 5px;
+					}
+
+					textarea {
+						resize: none;
+						width: 100%;
+
+					}
+
+					#cmt_btn_register,
+					#cmt_content {
+						width: 99%;
+						height: 100px;
+					}
+
+					.panel-heading {
+						background-color: black !important;
+					}
+
 
 					form.example input[type=text] {
 						padding: 10px;
@@ -95,114 +134,114 @@
 
 					}//end:insert_form()
 
-					function del(r_idx){
-	  
-	  				  //alert(r_idx +" 삭제");
-	  
-	  				  if(confirm("정말 삭제하시겠습니까?")==false) return;
-	  
-	  				  //삭제
-	                  location.href="delete.do?r_idx="+ r_idx
-	  
-                    }//end:del()
+					function del(r_idx) {
+
+						//alert(r_idx +" 삭제");
+
+						if (confirm("정말 삭제하시겠습니까?") == false) return;
+
+						//삭제
+						location.href = "reviewer_delete.do?r_idx=" + r_idx
+
+					}//end:del()
 
 					function modify_form(r_idx) {
-		
-					console.log(r_idx);
-					location.href="modify_form.do?r_idx=" + r_idx; //수정 폼 페이지
 
-	}//end : modify_form	
-				
+						console.log(r_idx);
+						location.href = "reviewer_modifyform.do?r_idx=" + r_idx; //수정 폼 페이지
+
+					}//end : modify_form	
+
 
 				</script>
 			</head>
 
-<body>
+			<body>
 
-	<!-- Header -->
-	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp" />
-	<section id="one">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-3">
+				<!-- Header -->
+				<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp" />
+				<section id="one">
+					<div class="container">
+						<div class="row">
+							<div class="col-sm-3">
 
-					<h2>고객센터</h2>
-					<p></p>
-					<ul class="nav nav-pills nav-stacked">
-						<li><a href="home.do">고객센터홈</a></li>
+								<h2>고객센터</h2>
+								<p></p>
+								<ul class="nav nav-pills nav-stacked">
+									<li><a href="home.do">고객센터홈</a></li>
 
-						<li><a href="notice.do">공지사항</a></li>
+									<li><a href="notice.do">공지사항</a></li>
 
-						<li><a href="faq.do">자주찾는질문</a></li>
+									<li><a href="faq.do">자주찾는질문</a></li>
 
-						<li><a href="qna.do">1:1문의</a></li>
+									<li><a href="qna.do">1:1문의</a></li>
 
-						<li class="active"><a href="reviewer.do">평론가</a></li>
-					</ul>
-					<hr class="hidden-sm hidden-md hidden-lg">
-				</div>
+									<li class="active"><a href="reviewer.do">평론가</a></li>
+								</ul>
+								<hr class="hidden-sm hidden-md hidden-lg">
+							</div>
 
-				<div class="col-sm-8">
-					<h1>평론글보기</h1>
+							<div class="col-sm-8">
+								<h1>평론글보기</h1>
 
-				</div>
-				<br>
-				<br>
+							</div>
+							<br>
+							<br>
 
 
-						<div class="col-sm-3">
-							<input class="btn btn-success" type="button" value="글남기기"
-								onclick="location.href='reviewer_form.do'">
+							<div class="col-sm-3">
+								<input class="btn btn-success" type="button" value="글남기기"
+									onclick="location.href='reviewer_form.do'">
+							</div>
+							<br>
+							<br>
+
+
+							<div class="col-sm-8">
+								<form class="table-wrapper"> <!--  action="form-inline" -->
+									<input type="hidden" name="mem_idx" value="${ user.mem_idx }">
+									<input type="hidden" name="r_idx" value="${ vo.r_idx }">
+									<table class="table-wrapper">
+										<div id="box">
+											<div class="panel panel-primary">
+												<div class="panel-heading"><b>${ vo.mem_name }</b>님의 글:</div>
+												<div class="panel-body">
+
+													<div id="subject"><b>제목:</b>${ vo.r_subject }</div>
+													<div id="content">${ vo.r_content }</div>
+													<div id="regdate"
+														style="display: flex; justify-content: space-between;">
+														<div>
+															<b>작성일자:</b> ${ vo.r_regdate }
+														</div>
+														<div>
+															<b>IP:</b> ${ vo.r_ip }
+														</div>
+													</div>
+
+													<tr>
+														<td colspan="2" align="center">
+															<!-- 글주인 or 관리자만 활성화 -->
+															<c:if test="${ (vo.mem_idx eq user.mem_idx) or (user.mem_grade eq '관리자') }">
+
+															<input type="button" class="button special" value="수정하기"
+																onclick="modify_form('${vo.r_idx}');">&nbsp;
+															<input class="button alt" type="button" value="삭제하기"
+																onclick="del('${ vo.r_idx }');">&nbsp;
+															</c:if>		
+															<input type="button" class="button" value="목록보기"
+																onclick="location.href='reviewer.do'">
+														</td>
+													</tr>
+									</table>
+								</form>
+							</div>
 						</div>
-						<br>
-						<br>
-
-						
-				<div class="col-sm-8">
-				<form class="table-wrapper"> <!--  action="form-inline" -->
-					<input type="hidden"  name="mem_idx"   value="${ user.mem_idx }">
-					<input type="hidden"  name="r_idx"  value="${ vo.r_idx }">
-					<table class="table-wrapper">
-						<tr>
-							<th colspan="2">
-								<b>${ vo.mem_name }</b>님의 문의
-							</th>
-						</tr>
-						<tr>
-							<th>제목</th>
-							<td id="subject">
-								${ vo.r_subject }
-							</td>
-						</tr>
-						<tr>
-							<th>내용</th>
-							<td id="content">
-								${ vo.r_content }
-							</td>
-						</tr>
-
-						<tr>
-							<td colspan="2" align="center">
-
-								
-								<input type="button" class="button special" value="수정하기"
-										onclick="modify_form('${vo.r_idx}');">&nbsp;
-								<input class="button alt" type="button" value="삭제하기"
-										onclick="del('${ vo.r_idx }');">&nbsp;
-								
-								<input type="button" class="button" value="목록보기"
-									onclick="location.href='reviewer.do'">
-							</td>
-						</tr>
-					</table>
-				</form>
-				</div>
-			</div>
-		</div>
+					</div>
 
 
-	</section>
-	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/footer.jsp" />
-</body>
+				</section>
+				<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/footer.jsp" />
+			</body>
 
-</html>
+			</html>

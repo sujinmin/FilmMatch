@@ -36,11 +36,63 @@
 	    
         location.href="../member/login_form.do?url=" + encodeURIComponent(location.href) ;
 	}
+
+	$(document).ready(function(){//제이쿼리문
+		
+		if("${ not empty param.search }"=="true"){
+			
+			$("#search").val("${ param.search }");
+		}
+		
+		//전체보기면 검색어 지워라
+		if("${ param.search eq 'all'}"== "true"){
+			
+			$("#search_text").val("");
+		}
+		
+	});
+
+	function find(){
+	  
+	  let search		=	$("#search").val();
+	  let search_text	=	$("#search_text").val().trim();
+	  
+	  //전체검색이 아닌데 검색어가 비어있으면 //내가 넘기는 데이터가 uft-8이면 생략해도됌
+	                                          //단 특수문자 & 문자(한글)를 넘기려면 encode uft-8입력
+	  if(search!='all' && search_text==''){
+		  alert('검색어를 입력하세요!!');
+		  $("#search_text").val("");
+		  $("#search_text").focus();
+		  return;
+	  }
+	  
+	  location.href="faq.do?search=" + search  +  "&search_text="   + encodeURIComponent(search_text,"uft-8");
+			       
+     }// end: find()
+
 </script>
 
 <style type="text/css">
 
 * {box-sizing: border-box;}
+
+.container{
+	width: 1300px;
+	height: 1300px;
+}
+
+#search_box{
+	width: 200px;
+	height: 60px;
+	
+}
+
+.search-bar{
+	width: 500px;
+	height: 60px;
+	margin-left: 180px;
+	margin-top: -3px;
+}
 
 body {
   font-family: Arial;
@@ -113,17 +165,48 @@ form.example::after {
 				  <div class="col-sm-8">
 					 <h2>자주찾는질문</h2>
 					  
-							<form class="example" action="/action_page.php">
-							
-							  <input type="text" placeholder="검색어를 입력하세요.." name="search">
-							  <button type="search-bar" class="btn btn-primary"><i class="fa fa-search"></i></button>
-							</form>
+					 <div id="search_box" class="row" >
+						<form class="form-inline" action="">  
+						
+							  <select id="search" name="search" class="form-control" style="height: 40px; width: 179px; float:left;";>
+								  <option value="all">전체보기</option>
+								  <option value="name">이름</option>
+								  <option value="subject">제목</option>
+								  <option value="content">내용</option>
+								  <option value="name_subject_content">이름+제목+내용</option>
+								  
+							  </select>
+						
+
+							  
+							 
+							<div class="search-bar" style="width:700px;">
+								
+									                                                                      <!-- 검색창에 검색어가 없어서 null이어도 null 표시하지 않음 -->
+								  <input type="text" placeholder="검색어를 입력하세요.." name="search_text" value="${  param.search_text eq 'null' ? '' : param.search_text}" style="float:left;width:500px;height:40px;">
+								  <button type="search-bar" class="btn btn-primary"; onclick="find();return false;">
+								<i class="fa fa-search" style="float:left;height:20px;"></i>
+								</button>
 							</div>
+
+								
+						</form>
+					   </div>
+					</div>
 							<br>
 							 
 						  
 						  
 						<div class="col-sm-8">
+							<h5>자주찾는질문입니다. 검색을 통해 간단한 문제나 궁금한 점을 해결보세요.</h5>
+							<div class="row" style="margin-bottom: 5px; margin-left: 2px;">
+								<form class="col-sm-3">
+									<!-- 관리자만 FAQ올리기 가능 -->
+									<c:if test="${ user.mem_grade eq '관리자' }">
+								   <input class="btn btn-success" type="button"  value="FAQ올리기" style="margin-left: -40px;"
+											  onclick="location.href='faq_insertform.do?f_idx=${ vo.f_idx }'" >
+									</c:if>
+								</form>
 								
 							<table class="table-wrapper"> 
 								<!-- 테이블 헤더 -->
@@ -132,23 +215,26 @@ form.example::after {
 									<th>제목</th>
 									<th>작성자</th>
 									<th>작성일</th>
-									<th>아이피</th>
 									<th>조회수</th>
 								</tr>
 								
-								<!-- 게시글 목록 -->
-								<c:forEach var="vo" items="${list}">
+								<!-- 자찾문 게시글 목록 -->
+								<c:forEach var="vo" items="${list}" varStatus="i">
 									
 									<tr>
 										<!-- 번호 -->
-										<td class="b_idx">
-											${vo.b_idx}
+										<td>
+										  ${vo.f_no}
 										</td>                                             
 										
+										<td>
+								  
 										<!-- 제목 -->
-										<td class="b_subject">
-										   ${vo.b_subject}
-										</td>
+										<c:if test="${ vo.f_use eq 'y' }">
+												<a href="faq_view.do?f_idx=${ vo.f_idx }&page=${ empty param.page ? 1 : param.page }">${ vo.f_subject }</a>
+										</c:if>
+		  
+											 </td>
 										
 										<!-- 작성자 -->
 										<td class="mem_name">
@@ -156,18 +242,15 @@ form.example::after {
 										</td>
 										
 										<!-- 작성일 -->
-										<td class="b_regdate">
-											${vo.b_regdate}
+										<td class="f_regdate">
+											${vo.f_regdate}
 										</td>
 										
-										<!-- 아이피 -->
-										<td class="b_ip">
-											${vo.b_ip}
-										</td>
+										
 										
 										<!-- 조회수 -->
-										<td class="b_readhit">
-											${vo.b_readhit}
+										<td class="f_readhit">
+											${vo.f_readhit}
 										</td>
 									</tr>
 								</c:forEach>
@@ -184,9 +267,9 @@ form.example::after {
 								<!-- 페이지 메뉴 -->
 								<tr>
 									<td colspan="6" align="center">
-										<br>
-										<br>
+										
 										<!-- Page Menu -->
+										${ pageMenu }
 										<ul class="page"></ul>
 									</td>
 								</tr>

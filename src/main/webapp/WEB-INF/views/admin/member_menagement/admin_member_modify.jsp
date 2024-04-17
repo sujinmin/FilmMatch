@@ -34,8 +34,7 @@
     } else if (mem_grade === '일반') {
         $("#mem_grade").val('일반');
     } else {
-        // 기타 등급일 경우 기본값 설정
-        // $("#mem_grade").val('평론가');
+        $("#mem_grade").val('평론가');
     }
 
     if (policy_a === 'Y') {
@@ -164,16 +163,10 @@
             <tr>
                 <th><label>이름</label></th>
                 <td><input class="form-control"  type="text" name="mem_name" value="${ vo.mem_name }"></td>
-                <!-- <input>tag의 속성 disabled="disabled"  form이 서버로 넘어갈 떄 주소에body에 안넘어간다. 
-                                        readonly="readonly"는 등록된 값은 넘어간다.	-->
             </tr>
             <tr>
                 <th><label>아이디</label></th>
-                <td><input class="form-control" name="mem_id" readonly="readonly" value="${ vo.mem_id }">
-                <!-- name : parameter로 서버로 넘어가는 data
-                        id : 서버로 보이지 않음 -->
-                    
-                </td>
+                <td><input class="form-control" name="mem_id" readonly="readonly" value="${ vo.mem_id }"></td>
             </tr>
             <tr>
                 <th><label>비밀번호</label></th>
@@ -224,6 +217,7 @@
                     <select class="form-control" name="mem_grade" id="mem_grade">
                         <option value="일반">일반</option>
                         <option value="관리자">관리자</option>
+                        <option value="평론가">평론가</option>
                     </select>
                 </td>
             </tr>
@@ -231,7 +225,7 @@
                 <th> 필수 이용약관 </th>
                 <td>
                     <select class="form-control" name="policy_a" id="policy_a">
-                        <option value="Y">동의하합니다.</option>
+                        <option value="Y">동의합니다.</option>
                         <option value="N">동의하지 않습니다.</option>
                     </select>
                 </td>
@@ -240,18 +234,20 @@
                 <th> 개인정보 약관 </th>
                 <td>
                     <select class="form-control" name="policy_b" id="policy_b">
-                        <option value="Y">동의하합니다.</option>
+                        <option value="Y">동의합니다.</option>
                         <option value="N">동의하지 않습니다.</option>
                     </select>
                 </td>
+            </tr>
+            <tr>
+                <th><label>카카오 아이디</label></th>
+                <td><input class="form-control" name="kakaoid" value="${ vo.kakaoid }"></td>
             </tr>
             
             <tr>
                 <td colspan="2" align="center">
                     <input class="btn btn-primary" type="button" value="회원수정" 
                             onclick="send(this.form);" >
-                    <!-- <input class="btn btn-success" type="button" value="목록보기"
-                            onclick="location.href='list.do'" > -->
                 </td>
             </tr> 
         </table>

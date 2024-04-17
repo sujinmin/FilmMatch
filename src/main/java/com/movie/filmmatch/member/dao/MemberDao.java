@@ -15,6 +15,8 @@ public interface MemberDao {
 	
 	public MemberVo selectOneFromId(String mem_id);
 
+	public MemberVo selectkakaoId(String kakaoid);
+
 	public int insert(MemberVo vo);
 
 	public int delete(int mem_idx);

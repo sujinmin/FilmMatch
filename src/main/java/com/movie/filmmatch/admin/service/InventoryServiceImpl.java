@@ -41,9 +41,10 @@ public class InventoryServiceImpl implements InventoryService {
 		return map;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public int insert_in(InventoryVo vo) throws Exception {
-		// TODO Auto-generated method stub
+	
 		
 		//1.입고등록
 		int res = inventory_in_dao.insert(vo);

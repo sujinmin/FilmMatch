@@ -312,7 +312,7 @@ function photo_upload() {
 	
 	<th style="text-align: right;"> 상품 출시일자</th>
 		<td style="text-align: left;"><input type="date" style="width: 80%" name="release_date"  value="${goodsvo.release_date}" ></td>
-		<th style="text-align: right;"> 제조사(임시)</th>
+		<th style="text-align: right;"> 제조사</th>
 		<td style="text-align: left;"><input type="text" style="width: 80%" name="goods_brand" value="${goodsvo.goods_brand}" ></td>
 	</tr>
 	

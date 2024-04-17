@@ -8,9 +8,62 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectList" resultType="support">
 		select * from support
 		order by b_ref desc, b_step asc 
-		 <!-- where community_page = ${community_page}
-		 order by b_ref desc, b_step asc  -->
+		 
 	</select>
+
+	<!-- 문의글 검색 조회 -->
+	<select id="selectConditionList" parameterType="Map" resultType="support">
+		
+		select * from
+		(
+			select 
+				s.*, rank() over(order by b_ref desc, b_step asc) as no 
+			from
+			(
+				select * from support
+				<trim prefix="where" prefixOverrides="or"><!--prefixOverrides: 프리픽스재정의=or는 또는  -->
+					
+						<if test="name!=null">
+							mem_name like  concat( '%', #{ name }, '%' )
+						</if>
+						<if test="subject!=null"> 
+							or b_subject like  concat( '%', #{ subject }, '%' )
+						</if>
+						<if test="content!=null"> 
+						or b_content like  concat( '%', #{ content }, '%' )
+						</if>
+				</trim>
+			) s
+		) ss
+		where no between #{ start } and #{ end }
+
+	</select>
+
+    <!-- 조건별 검색된 게시물 수 -->
+    <select id="selectConditionRowTotal" parameterType="Map" resultType="int">
+		
+		select 
+			ifnull(count(*),0) 
+		from
+		(
+			select * from support
+			<trim prefix="where" prefixOverrides="or"><!--prefixOverrides: 프리픽스재정의=or는 또는  -->
+				
+					<if test="name!=null">
+						mem_name like  concat( '%', #{ name }, '%' )
+					</if>
+					<if test="subject!=null"> 
+					or b_subject like  concat( '%', #{ subject }, '%' )
+					</if>
+					<if test="content!=null"> 
+					or b_content like  concat( '%', #{ content }, '%' )
+					</if>
+			</trim>
+		) s
+		
+		
+	</select>
+
 
 	<select id="selectMaxB_idx" resultType="int">
 	    select ifnull(max(b_idx),0) from support
@@ -24,8 +77,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 문의하기(글쓰기) -->
 	<insert id="insert"  parameterType="support">
-       insert into support(b_idx, b_subject, mem_idx, mem_name, b_content, b_regdate,b_ref,b_step,b_depth,b_use) 
-                   values(#{b_idx},#{ b_subject } ,#{ mem_idx },#{ mem_name } , #{ b_content } , now(),#{b_ref},0,0,'y')
+       insert into support(b_idx, b_subject, mem_idx, mem_name, b_content, b_regdate,b_ref,b_step,b_depth) 
+                   values(#{b_idx},#{ b_subject } ,#{ mem_idx },#{ mem_name } , #{ b_content } , now(),#{b_ref},0,0)
     </insert>
 
 	<!-- 문의 글삭제 -->

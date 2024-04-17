@@ -7,11 +7,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -33,8 +29,9 @@ public class MemberContoller {
 	
 	@Autowired
 	HttpSession session;
-	
-	
+
+    @Autowired
+	HttpServletRequest request;		
 
 
 	/**
@@ -106,11 +103,8 @@ public class MemberContoller {
 
 	//회원가입 폼띄우기
 	@RequestMapping("signup_form.do")
-	public String signup_form(@RequestParam("policy_a") String policy_a, 
-							  @RequestParam("policy_b") String policy_b, 
-							  MemberVo vo,
+	public String signup_form(
 							  HttpSession session, Model model) {
-
 		String randomCode = (String) session.getAttribute("randomCode");
 		model.addAttribute("randomCode", randomCode);
 
@@ -121,13 +115,16 @@ public class MemberContoller {
 	 * @return
 	 */
 	@RequestMapping("insert.do")
-	public String insert( @ModelAttribute("membervo") MemberVo vo, 
-								BindingResult bindingResult, 
-								Model model,
-								HttpServletRequest request) {
-
+	public String insert( MemberVo vo) {
+		System.out.println("--------[member/insert.do]-------------------------");						
+		System.out.println(vo.getKakaoid());
+		System.out.println("---------------------------------------------------");						
 		String mem_ip = request.getRemoteAddr();
-		vo.setMem_ip(mem_ip); // UserVo에 IP 주소 설정
+		//String kakaoid = request.getkakao
+
+		vo.setMem_ip(mem_ip);
+		
+		
 
 		member_dao.insert(vo);
 		
@@ -140,7 +137,11 @@ public class MemberContoller {
 
 		return "redirect:../index.do";
 	}
-	
+	/**
+	 * 아이디 체크
+	 * @param mem_id
+	 * @return
+	 */
 	@RequestMapping("/check_id.do")
 	@ResponseBody
     public String check_id(String mem_id) {
@@ -157,63 +158,40 @@ public class MemberContoller {
     }
 
 	/**
-	 * 카카오톡에서 정보를 세션에 저장해서 가져오는 방법
-	 * @param userInfo
-	 * @param request
+	 * 카카오 로그인
+	 * @param kakaoid
 	 * @return
 	 */
-	//  @RequestMapping(value = "/save-kakao-user-info.do", method = {RequestMethod.POST, RequestMethod.GET})
-    // // @ResponseBody
-    // public String saveKakaoUserInfo(@RequestBody String userInfo, 
-	// 								HttpServletRequest request,
-	// 								Model model) {
+	@RequestMapping("save-kakao-user-info.do")
+	@ResponseBody
+	public Map<String,Object> saveKakaoUserInfo(@RequestParam(name="id") String kakaoid) {
+		System.out.println("컨트롤러 확인:"+ kakaoid);
 		
-	// 	try {
-	// 		System.out.println("받은 사용자 정보: " + userInfo);
+		//kakoId가 DB확인
+		MemberVo user = member_dao.selectkakaoId(kakaoid);
 
-	// 		// 받은 사용자 정보를 세션에 저장
-	// 		HttpSession session = request.getSession();
-	// 		session.setAttribute("kakaoUserInfo", userInfo);
-			
-	// 		// 모델에 로그인 정보를 추가하여 회원 가입 페이지로 전달
-	// 		model.addAttribute("kakaoUserInfo", userInfo);
 
-	// 		return "member/signup_form";
+		Map<String,Object> map = new HashMap<>();
 
-	// 	} catch (Exception e) {
-	// 		System.err.println("에러 발생: " + e.getMessage());
-	// 		throw e; // 예외를 다시 던져서 스프링이 적절하게 처리하도록 함
-	// 	}
-    // }
-	@RequestMapping(value = "/save-kakao-user-info.do", method = {RequestMethod.POST, RequestMethod.GET})
-	public String saveKakaoUserInfo(@RequestBody(required = false) String userInfo, 
-									 @RequestParam(required = false) String userInfoQueryParam,
-									 HttpServletRequest request,
-									 Model model) {
-	
-		try {
-			if (userInfo != null) {
-				System.out.println("받은 사용자 정보: " + userInfo);
-				HttpSession session = request.getSession();
-				session.setAttribute("kakaoUserInfo", userInfo);
-				model.addAttribute("kakaoUserInfo", userInfo);
-			} else if (userInfoQueryParam != null) {
-				System.out.println("받은 사용자 정보(쿼리 파라미터): " + userInfoQueryParam);
-				HttpSession session = request.getSession();
-				session.setAttribute("kakaoUserInfo", userInfoQueryParam);
-				model.addAttribute("kakaoUserInfo", userInfoQueryParam);
-			} else {
-				// 요청에 사용자 정보가 없을 경우 처리
-				System.out.println("사용자 정보가 없습니다.");
-			}
-	
-			return "member/signup_form";
-		} catch (Exception e) {
-			System.err.println("에러 발생: " + e.getMessage());
-			throw e;
-			
+		//있으면 로그인 처리
+		if(user!=null){
+
+			//로그인 정보를 세션에 저장
+			session.setAttribute("user", user);
+
+			map.put("result", true);
+
+			return map;
 		}
+
+
+		//없으면 회원가입
+		map.put("result", false);
+	
+		return map;
+		
 	}
+	
 
 	@RequestMapping("main.do")
     public String main() {

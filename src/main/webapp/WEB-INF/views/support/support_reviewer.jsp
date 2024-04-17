@@ -24,6 +24,7 @@
   <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
  
  <script type="text/javascript">
+
     function login(){
 	    
         location.href="../member/login_form.do?url=" + encodeURIComponent(location.href) ;
@@ -34,15 +35,67 @@
 		
 		
 		//글쓰기 폼으로 이동
-		location.href="reviewer_form.do"; 
+		location.href="reviewer_insertform.do"; 
 		
 	}
+
+	$(document).ready(function(){//제이쿼리문
+		
+		if("${ not empty param.search }"=="true"){
+			
+			$("#search").val("${ param.search }");
+		}
+		
+		//전체보기면 검색어 지워라
+		if("${ param.search eq 'all'}"== "true"){
+			
+			$("#search_text").val("");
+		}
+		
+	});
+
+	function find(){
+	  
+	  let search		=	$("#search").val();
+	  let search_text	=	$("#search_text").val().trim();
+	  
+	  //전체검색이 아닌데 검색어가 비어있으면 //내가 넘기는 데이터가 uft-8이면 생략해도됌
+	                                          //단 특수문자 & 문자(한글)를 넘기려면 encode uft-8입력
+	  if(search!='all' && search_text==''){
+		  alert('검색어를 입력하세요!!');
+		  $("#search_text").val("");
+		  $("#search_text").focus();
+		  return;
+	  }
+	  
+	  location.href="reviewer.do?search=" + search  +  "&search_text="   + encodeURIComponent(search_text,"uft-8") ;
+			       
+     }// end: find()
 
 
  	</script>
 
-  <style type="text/css">
-	* {box-sizing: border-box;}
+<style type="text/css">
+
+* {box-sizing: border-box;}
+
+.container{
+	width: 1300px;
+	height: 1300px;
+}
+
+#search_box{
+	width: 200px;
+	height: 60px;
+	
+}
+
+.search-bar{
+	width: 500px;
+	height: 60px;
+	margin-left: 180px;
+	margin-top: -3px;
+}
 
 body {
   font-family: Arial;
@@ -120,20 +173,42 @@ form.example::after {
 
 						<h2>평론가 게시판</h2>
 						
-						<!-- <p>빠른검색</p> -->
-						<form class="example" action="/action_page.php">
+						<div id="search_box" class="row" >
+							<form class="form-inline">  
 							
-  							<input type="text" placeholder="검색어를 입력하세요.." name="search">
-  							<button type="search-bar" class="btn btn-primary"><i class="fa fa-search"></i></button>
-						</form>
+								  <select id="search" name="search" class="form-control" style="height: 40px; width: 179px; float:left;";>
+									  <option value="all">전체보기</option>
+									  <option value="name">이름</option>
+									  <option value="subject">제목</option>
+									  <option value="content">내용</option>
+									  <option value="name_subject_content">이름+제목+내용</option>
+
+								  </select>
+							
+	
+								  
+								 
+								<div class="search-bar" style="width:700px;">
+									
+									                                                                           <!-- 검색창에 검색어가 없어서 null이어도 null 표시하지 않음 -->
+									  <input type="text" placeholder="검색어를 입력하세요.." name="search_text" value="${  param.search_text eq 'null' ? '' : param.search_text}" style="float:left;width:500px;height:40px;">
+									  <button type="search-bar" class="btn btn-primary";   onclick="find();return false;">
+									<i class="fa fa-search" style="float:left;height:20px;"></i>
+									</button>
+								</div>
+	
+									
+							</form>
+						   </div>
 						</div>
 					  	<br>
 
 				   <div class="col-sm-8">
-					<!-- 이 if태그는 mem_grade가 "평론가" -->
+					<!-- 이 if태그는 mem_grade가 "평론가"이지만 임시로 일반등급 -->
 					<!-- 123여기는 아무에게나 보이고 -->
+					<!-- 평론가만 평론글남기기 가능 -->
 					<c:if test="${ member.mem_grade eq '일반'}">
-    					<p>평론가 전용 페이지입니다.</p>
+    					<h5>평론가 전용 페이지입니다.</h5>
 						<form>
 							<input type="button" value="글남기기" onclick="send(this.form);">
 						</form>
@@ -157,7 +232,7 @@ form.example::after {
 
 								<!-- 번호 -->
 								<td>
-									${i.count}
+									${vo.r_no}
 								</td>                                             
 								
 								<!-- 제목 -->
@@ -202,8 +277,9 @@ form.example::after {
 						<!-- 페이지 메뉴 -->
 						<tr>
 							<td colspan="6" align="center">
-								<br>
-								<br>
+								
+								${ pageMenu }
+
 								<!-- Page Menu -->
 								<ul class="page"></ul>
 							</td>

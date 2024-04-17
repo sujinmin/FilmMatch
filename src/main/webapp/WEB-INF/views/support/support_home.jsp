@@ -15,6 +15,7 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
@@ -33,15 +34,58 @@
 	
 	* {box-sizing: border-box;}
 
+.container{
+	width: 1400px;
+	height: 1100px;
+}
+
+
+
+#search_box{
+	width: 300px;
+	height: 60px;
+	
+}
+
+.search-bar{
+	width: 500px;
+	height: 60px;
+	margin-left: 180px;
+	margin-top: -3px;
+}
+
+
+
+
 body {
   font-family: Arial;
 	}
  .box {
-	width: 350px;
-	height: 280px;
+	width: 300px;
+	height: 250px;
 	float: left;
 	margin-right: 30px;
 	padding-bottom: 100px; /* 아래쪽으로 간격을 벌립니다. */
+	border: 1px solid transparent !important;
+}
+
+.col-sm-3{
+	width: 402px;
+	
+	
+}
+
+.col-sm-4{
+	width: 490px;
+	height: 360px;
+	margin-top: -10px;
+	font-size: small;
+}
+
+.col{
+	width: 1080px;
+	height: 284px;
+	font-size: medium;
 }
 
 
@@ -77,6 +121,10 @@ form.example::after {
 }
 
 
+
+
+
+
  </style>
 </head>
 <body>
@@ -84,17 +132,10 @@ form.example::after {
 <!-- Header -->
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/header.jsp"/>
 
-
-
-
-
-
-
-
 <section id="one">
-			<div class="container">
+			<div class="container" style="border: 1px solid transparent;">
 				<div class="row">
-				  <div class="col-sm-3">
+				  <div class="col-sm-3" style="border: 1px solid transparent;">
 					
 					<h2>고객센터</h2>
 					<p></p>
@@ -108,60 +149,65 @@ form.example::after {
 					  	<li><a href="qna.do">1:1문의</a></li>
 
 						<li><a href="reviewer.do">평론가</a></li>
-				
 					</ul>
 					<hr class="hidden-sm hidden-md hidden-lg">
 				  </div>
 				  
-				  <div class="col-sm-3">
+				  <div class="col-sm-9" style="border: 1px solid transparent;" > 
+					
 						<h2>고객센터홈</h2>
+						
+						<h5>Film Match 고객센터 페이지입니다.</h5>
+						<br>
 
 						
-						  <div id="search_box" class="row">
-							<form class="form-inline">  
+						  <!-- <div id="search_box" class="row" >
+							<form class="form-inline" action="">  
 							
-								  <select id="search" name="search" class="form-control">
+								  <select id="search" name="search" class="form-control" style="float:left;height:40px;";>
 									  <option value="all">전체보기</option>
 									  <option value="name">이름</option>
+									  <option value="subject">제목</option>
 									  <option value="content">내용</option>
-									  <option value="name_content">이름+내용</option>
-									  <option value="regdate">작성날짜(YYYY-MM-DD)</option>
+									  <option value="name_suject_content">이름+제목+내용</option>
+									  
 								  </select>
 							
 
-								  <!-- <input id="search_text" class="form-control" value="${ param.search_text }">
-					
-								  <input type="button" value="검색" class="btn btn-success" onclick="find();"> -->
-								<div></div>  
-								<div class="col-sm-8">
-  									<input type="text" placeholder="검색어를 입력하세요.." name="search">
-						  			<button type="search-bar" class="btn btn-primary">
-									<i class="fa fa-search"></i>
+								  
+								 
+								<div class="search-bar" style="width:700px;" >
+									
+
+  									<input type="text" placeholder="검색어를 입력하세요.." name="search" style="float:left;width:500px;height:40px;">
+						  			<button type="search-bar" class="btn btn-primary";>
+									<i class="fa fa-search"style="float:left;height:20px;"></i>
 									</button>
 								</div>
+								</form>
+							</div>기능구현하지못함으로 주석처리 -->
 
-									
-							</form>
-						   </div>
+
+
 						</div>	
 
 					  	<br>
 
-				   <div class="col">
-
+				   <div class="col" style="border: 1px solid transparent;" style= "margin-left:50px;">
+					<!-- style="border: 1px solid black;"임시보더로 간격맞추기 -->
 					<div class="box">
 						<h3><a href="qna.do">1:1문의</a></h3>
 					  <p><a href="qna.do">해결되지않은 문제가 있나요?</a></p>
 					  <p><a href="qna.do">1:1문의로 문의주세요</a></p>
 					</div>
 
-				    <div class="box">
+				    <div class="box" style= "margin-left:20px;">
 						<h3><a href="faq.do">자주찾는질문</a></h3>
 					  <p><a href="faq.do">자주찾는질문</a></p>
 					  <p><a href="faq.do">빠르고 간편하게 검색하세요</a></p>
 					</div>
 
-					<div class="box">
+					<div class="box" style= "margin-left:10px;">
 						<h3><a href="reviewer.do">평론가</a></h3>
 					  <p><a href="reviewer.do">평론가 한마디</a></p>
 					  <p><a href="reviewer.do">평론가의 의견을 확인해보세요</a></p>
@@ -169,88 +215,117 @@ form.example::after {
 					
 				   </div>
 
-				   <div>
-					
-					
-					</div>
+				   
+				   <div></div>
 				   	
-					<div>
-						
-						
-					</div>
+					<div></div>
+					
 				   </div>
-				   <hr>
+				   <br>
 				   
 
 				
 				  
-				  <div class="col-sm-8">
+				  <div class="col-sm-4" style="border: 1px solid black;margin-left: 360px;">
+					<div class="tit-area"><h3 class="tit medium">자주찾는질문 BEST5</h3>
+						<a href="faq.do" class="more" title="더보기">더보기</a></div>
 					
-						<table class="table-wrapper"> 
+						<table class="table-wrapper" style="float:left;"> 
 							<!-- 테이블 헤더 -->
-							<tr>
+							<!-- <tr>
 								<th>번호</th>
 								<th>제목</th>
-								<th>작성자</th>
 								<th>작성일</th>
-								<th>아이피</th>
-								<th>조회수</th>
-							</tr>
+								
+							</tr>  -->
 							
 							<!-- 게시글 목록 -->
-							<c:forEach var="vo" items="${list}">
+							<c:forEach var="faq" items="${ faq_list }" varStatus="i">
 								
 								<tr>
 									<!-- 번호 -->
-									<td class="b_idx">
-										${vo.b_idx}
+									<td>
+										${i.count}
 									</td>                                             
 									
 									<!-- 제목 -->
-									<td class="b_subject">
-						               ${vo.b_subject}
+									<td class="f_subject">
+										<c:if test="${ faq.f_use eq 'y' }">
+										<a href="faq_view.do?f_idx=${ faq.f_idx }&page=${ empty param.page ? 1 : param.page }">${ faq.f_subject }</a>
+										<br>
+										</c:if>
 									</td>
-									
-									<!-- 작성자 -->
-									<td class="mem_name">
-										${vo.mem_name}
-									</td>
+								
 									
 									<!-- 작성일 -->
-									<td class="b_regdate">
-										${vo.b_regdate}
+									<td class="f_regdate">
+										${ fn:substring(faq.f_regdate,0,10)}
 									</td>
 									
-									<!-- 아이피 -->
-									<td class="b_ip">
-										${vo.b_ip}
-									</td>
-									
-									<!-- 조회수 -->
-									<td class="b_readhit">
-										${vo.b_readhit}
-									</td>
 								</tr>
 							</c:forEach>
 							
 							<!-- 게시물이 없는 경우 -->
-							<c:if test="${empty list}">
+							<c:if test="${empty faq_list}">
 								<tr>
-									<td colspan="6" align="center">
+									<td colspan="4" align="center">
 										<font color="red">등록된 게시글이 없습니다.</font>
 									</td>
 								</tr>
 							</c:if>
 							
-							<!-- 페이지 메뉴 -->
-							<tr>
-								<td colspan="6" align="center">
-									<br>
-									<br>
-									<!-- Page Menu -->
-									<ul class="page"></ul>
-								</td>
-							</tr>
+							
+						</table>
+					</div>
+
+					<div class="col-sm-4" style="border: 1px solid black;margin-left: 100px;">
+						<div class="tit-area"><h3 class="tit medium">공지사항 Recent</h3>
+							<a href="notice.do" class="more" title="더보기">더보기</a></div>
+
+						<table class="table-wrapper" style="float:left;"> 
+							<!-- 테이블 헤더 -->
+							<!-- <tr>
+								<th>번호</th>
+								<th>제목</th>
+								<th>작성일</th>
+								
+							</tr> -->
+							
+							<!-- 게시글 목록 -->
+							<c:forEach var="notice" items="${ notice_list }" varStatus="i">
+								
+								<tr>
+									<!-- 번호 -->
+									<td>
+										${i.count}
+									</td>                                             
+									
+									<!-- 제목 -->
+									<td class="n_subject" >
+										<c:if test="${ notice.n_use eq 'y' }">
+										<a href="notice_view.do?n_idx=${ notice.n_idx }&page=${ empty param.page ? 1 : param.page }">${ notice.n_subject }</a>
+										<br>
+										</c:if>
+									</td>
+									
+									<!-- 작성일 -->
+									<td class="n_regdate">
+										${ fn:substring(notice.n_regdate,0,10)}
+									</td>
+									
+								</tr>
+							</c:forEach>
+							
+							<!-- 게시물이 없는 경우 -->
+							<c:if test="${empty notice_list}">
+								<tr>
+									<td colspan="4" align="center">
+										<font color="red">등록된 게시글이 없습니다.</font>
+									</td>
+								</tr>
+							</c:if>
+							
+							
 						</table>
 					</div>
 					 <br>

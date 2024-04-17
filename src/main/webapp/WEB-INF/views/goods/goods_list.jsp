@@ -94,7 +94,7 @@ $(document).ready(function(){
 
 
 									<li class="state_giftcard"><a href="goods_view.do?goods_idx=${vo.goods_idx}" class="btn_category_product" style="text-decoration: none; color: inherit;"> <span class="com_list_img_wrap" > <img src="${ pageContext.request.contextPath }/upload/${vo.image_url}" alt="" >
-										</span> <span class="com_list_text_wrap"> <span class="com_list_text_title">${vo.goods_name}</span> <span class="com_list_text_name"><strong style="color: black; "><fmt:formatNumber value="${vo.goods_price}"></fmt:formatNumber></strong></span><span class="com_list_sale_price_wrap"> 
+										</span> <span class="com_list_text_wrap"> <span class="com_list_text_title">${vo.goods_name}</span> <span class="com_list_text_name"><strong style="color: black; "><fmt:formatNumber value="${vo.goods_price}"></fmt:formatNumber>원</strong></span><span class="com_list_sale_price_wrap"> 
 											</span>
 										</span>
 									</a> <a href="#none" class="btn_category_product_gift"></a> <a href="#none" class="btn_category_product_buy"></a></li>

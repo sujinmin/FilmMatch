@@ -45,6 +45,45 @@
 	/* 아래쪽으로 간격을 벌립니다. */
 	}
 
+	#box{
+	  width: auto;
+	  height: auto;
+	  
+	}
+	
+	#subject,#regdate{
+	
+		border: 1px solid #cccccc;
+		box-shadow: 1px 1px 1px gray;
+		padding: 3px;
+		margin-bottom: 5px;
+	}
+	
+	#content{ /* id는 '#'class는 '.' */
+		min-height: 120px;
+		border: 1px solid #cccccc;
+		box-shadow: 1px 1px 1px gray;
+		padding: 3px;
+		margin-bottom: 5px;
+	}
+	
+	textarea{
+		resize: none;
+		width: 100% ;
+		
+	}
+	
+	#cmt_btn_register,#cmt_content{
+		width:   99%;
+		height: 100px;
+	}
+
+	.panel-heading{
+		background-color: black !important;
+	}
+
+	
+
 
 	form.example input[type=text] {
 	padding: 10px;
@@ -80,21 +119,7 @@
 
 	<script type="text/javascript">
 
-	function qna_form() {
-
-	if ("${ empty user }" == "true") {
-
-	if (confirm("글쓰기는 로그인 후에 가능합니다\n로그인 하시겠습니까?") == false) return;
-
-	location.href = "../member/login_form.do";
-
-	return;
-	}
-
-	//글쓰기 폼으로 이동
-	location.href = "qna_form.do"; // /support/qna.jsp
-
-	}//end:insert_form()
+	
 
 
 	function del(b_idx){
@@ -254,7 +279,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-3">
-					<!-- 메뉴 -->
+
 					<h2>고객센터</h2>
 					<p></p>
 					<ul class="nav nav-pills nav-stacked">
@@ -270,7 +295,7 @@
 					</ul>
 					<hr class="hidden-sm hidden-md hidden-lg">
 				</div>
-				<!-- 내용 -->
+
 				<div class="col-sm-8">
 					<h1>게시물 보기</h1>
 
@@ -281,7 +306,7 @@
 
 				<div class="col-sm-3">
 				<input class="btn btn-success" type="button" value="문의하기"
-						onclick="location.href='qna_form.do'">
+						onclick="location.href='qna_insertform.do'">
 				</div>
 				<br>
 				<br>
@@ -292,23 +317,22 @@
 					<input type="hidden"  name="mem_idx"   value="${ user.mem_idx }">
 					<input type="hidden"  name="b_idx"  value="${ vo.b_idx }">
 					<table class="table-wrapper">
-						<tr>
-							<th colspan="2">
-								<b>${ vo.mem_name }</b>님의 문의
-							</th>
-						</tr>
-						<tr>
-							<th>제목</th>
-							<td id="subject">
-								${ vo.b_subject }
-							</td>
-						</tr>
-						<tr>
-							<th>내용</th>
-							<td id="content">
-								${ vo.b_content }
-							</td>
-						</tr>
+						<div id="box">
+							<div class="panel panel-primary">
+								<div class="panel-heading"><b>${ vo.mem_name }</b>님의 글:</div>
+								<div class="panel-body">
+									
+									<div id="subject"><b>제목:</b>${ vo.b_subject }</div>
+									<div id="content">${ vo.b_content }</div>
+									<div id="regdate"
+										style="display: flex; justify-content: space-between;">
+										<div>
+											<b>작성일자:</b> ${ vo.b_regdate }
+										</div>
+										<div>
+											<b>IP:</b> ${ vo.b_ip }
+										</div>
+									</div>
 
 						<tr>
 							<td colspan="2" align="center">
@@ -331,44 +355,34 @@
 						</tr>
 					</table>
 				</form>
-
-				<!-- 댓글등록폼 -->
-				<div class="row inner">
-					<div ><!-- class="col-sm-6 col-sm-offset-5" -->
-						<form>
-							<div class="row uniform">
-								<div class="12u$" style="width: 1000px; display: flex;">
-								<!-- <div class="12u$" style="width: 1000px; display: flex;"> -->
-									<textarea style="width:75%;" id="cmt_content" placeholder="로그인 후에 댓글쓰기가 가능합니다" rows="6"></textarea>
-									<input class="button comment" id="b_btn_register" type="button" value="댓글쓰기"
-										style="width:200px; margin-top: 60px;" onclick="comments_insert();">
-								</div>
-							</div>
-						</form>
-					</div>
 				</div>
-
-				<!-- <hr> -->
-				<!-- 댓글목록 출력 -->
-				<div id="disp">
-
-				</div>
-
-
-
-
-				</div><!-- class="col-sm-8" -->
-
-			</div><!-- row -->
+			</div>
+		</div>
 		<br><br>
 
-		
+			<!-- 댓글등록폼 -->
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-5">
+				<form>
+					<div class="row uniform">
+						<div class="12u$" style="width: 1000px; display: flex;">
+							<textarea style="width:75%;" id="cmt_content" placeholder="로그인 후에 댓글쓰기가 가능합니다" rows="6"></textarea>
+							<input class="button comment" id="b_btn_register" type="button" value="댓글쓰기"
+								style="width:200px; margin-top: 60px;" onclick="comments_insert();">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
 
-		
+		<!-- <hr> -->
+			<!-- 댓글목록 출력 -->
+		<div id="disp">
+		</div>
+	 </div>
 
 
-
-	</section><!-- container -->
+	</section>
 	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/main/footer.jsp" />
 </body>
 

@@ -9,6 +9,8 @@
 
 
 <title>FilmFlow - 영화, 책 ,TV프로그램 추천 및 평가 서비스</title>
+<!-- 카카오 스크립트 -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
  <style>
  /* Header */
 
@@ -152,6 +154,30 @@ body {
 	}
 
  </style>
+ <script>
+	function logout() {
+	//카카오로그아웃  
+	
+		Kakao.init('6784459c01933192e7189973c6eddbcc');
+		
+		if (Kakao.Auth.getAccessToken()) {
+			console.log("if문 진입");
+		Kakao.API.request({
+			url: '/v1/user/unlink',
+			success: function (response) {
+				console.log(response);
+			},
+			fail: function (error) {
+			console.log(error)
+			},
+		})
+		console.log("로그아웃진행");
+		Kakao.Auth.setAccessToken(undefined);
+		}
+	// }  
+	location.href="${pageContext.request.contextPath}/member/logout.do";
+}
+ </script>
 
 </head>
 <!-- Header -->
@@ -162,7 +188,7 @@ body {
 								<a href="${pageContext.request.contextPath}/member/login_form.do">LOGIN</a>
 							</c:if>
 							<c:if test="${ ! empty sessionScope.user }"><span style="font-size:20px; color:#33ccff;">${user.mem_name}님</span>
-								<a href="${pageContext.request.contextPath}/member/logout.do">LOGOUT</a>
+								<a onclick="logout();">LOGOUT</a>
 								<a href="${pageContext.request.contextPath}/mypage_form.do">MYPAGE</a>
 							</c:if>
 						 <c:if test="${ user.mem_grade eq '관리자' }">

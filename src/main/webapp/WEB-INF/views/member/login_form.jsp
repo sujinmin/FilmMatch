@@ -118,24 +118,52 @@ function kakaoLogout() {
   // 카카오 로그인 함수
   function kakaoLogin() {
     if(confirm("14세 이상에 동의합니다.")==false) return;
+
       Kakao.Auth.login({
-          success: function (response) {
-            console.log(response);
-              // 카카오 로그인 성공 시 사용자 정보를 요청
-              Kakao.API.request({   url: '/v2/user/me',
-                                    success: function (response) 
-                    {
-                      // 로그인 성공 시 사용자 정보를 서버로 전송하는 함수 호출
-                      sendUserInfoToServer(response);
-                    },
+        success: function (response) {
+            
+            // 카카오 로그인 성공 시 사용자 정보를 요청
+            Kakao.API.request({   url: '/v2/user/me',
+                                  success: function (response) 
+                                  {
+                                  // 로그인 성공 시 사용자 정보를 서버로 전송하는 함수 호출
+                                  //sendUserInfoToServer(response);
+                                    console.log("로그인 성공 : "+response.id);
+                                    //console.log(response);
+                                    alert(response.id);
+
+                                  $.ajax({
+                                            type: "POST",
+                                            url: "../member/save-kakao-user-info.do",
+
+                                            data: { "id" : response.id }, // 사용자 ID를 파라미터로 전달
+                                            dataType:"json",
+                                            success: function (data) { 
+                                              if(data.result){
+                                                // data = {"result": true}
+                                                console.log("ajax 사용자 정보 전송 성공");
+                                                location.href="../index.do";
+                                              }else{
+                                                 // data = {"result":false}
+                                                 //가입폼
+                                                 location.href="../member/signup_form.do?kakaoid=" + response.id +"&policy_a=Y&policy_b=Y";
+
+                                              }
+                                            },
+                                            error: function (xhr, status, error) {
+                                              console.error("사용자 정보 전송 실패:", error);  
+                                            }
+                                  }); 
                     
-                    fail: function (error) {
-                      console.log('카카오 사용자 정보 요청 실패:', error);
-                    }
-                  });
-                  window.location.href = "../member/save-kakao-user-info.do"; //세션에 저장 후 성공시 회원가입 
-          },
-          fail: function (error) {
+                                  },
+                                  fail: function (error) {
+                                    console.log('카카오 사용자 정보 요청 실패:', error);
+                                  }
+            });
+                  // window.location.href = "../member/save-kakao-user-info.do"; 
+                  //세션에 저장 후 성공시 회원가입 
+        },
+        fail: function (error) {
               console.log('카카오 로그인 실패:', error);
               alert("카카오 로그인 실패");
         }
@@ -159,22 +187,22 @@ function kakaoLogout() {
   }
   
   // 서버로 사용자 정보를 전송하는 함수
-  function sendUserInfoToServer(userInfo) {
-      $.ajax({
-          url: '/save-kakao-user-info.do', // 서버의 해당 엔드포인트
-          type: 'POST',
-          contentType: 'application/json',
-          data: JSON.stringify(userInfo),
-          success: function (response) {
-              console.log('서버에 사용자 정보 전송 성공:', response);
-              // 로그인 성공 후 메인 화면으로 이동
-              window.location.href = '../member/signup_form.do';
-          },
-          error: function (xhr, status, error) {
-              console.log('서버에 사용자 정보 전송 실패:', error);
-          }
-      });
-  }
+  // function sendUserInfoToServer(userInfo) {
+  //     $.ajax({
+  //         url: '/save-kakao-user-info.do',
+  //         type: 'json',
+  //         contentType: 'application/json',
+  //         data: JSON.stringify(userInfo),
+  //         success: function (response) {
+  //             console.log('서버에 사용자 정보 전송 성공:', response);
+  //             // 로그인 성공 후 메인 화면으로 이동
+  //             window.location.href = '../member/signup_form.do';
+  //         },
+  //         error: function (xhr, status, error) {
+  //             console.log('서버에 사용자 정보 전송 실패:', error);
+  //         }
+  //     });
+  // }
   </script>
 
 </head>
@@ -197,7 +225,7 @@ function kakaoLogout() {
         <!-- Form -->
         <form>
             <!-- ID input : first-input input__block first-input__block -->
-            <input type="hidden" id="${ param.nickname}">
+            
             <div><input type="button" onclick="location.href='policy.do'" value="회원가입"></div>
             <table>
                 <tr>
@@ -242,11 +270,11 @@ function kakaoLogout() {
               </a>
             </button> -->
 
-            <!-- <div onclick="kakaoLogout();">
+            <div onclick="kakaoLogout();">
               <a href="javascript:void(0)">
                   <span>카카오 로그아웃</span>
               </a>
-            </div> -->
+            </div>
 
         
         <!-- <button class="kakao__btn " onclick="send(this.form);">

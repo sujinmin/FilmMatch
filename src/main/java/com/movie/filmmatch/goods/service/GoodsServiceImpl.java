@@ -72,7 +72,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
-     * 재고 테이블에 직빵으로 집어넣을 지, 아니면 후처리할지는...흐음 나중에 보자
+     * 상품등록
      */
     @Override
     public int goods_insert(GoodsVo vo) {

@@ -33,7 +33,25 @@
 
 <style type="text/css">
 
-	* {box-sizing: border-box;}
+* {box-sizing: border-box;}
+
+.container{
+	width: 1300px;
+	height: 1300px;
+}
+
+#search_box{
+	width: 200px;
+	height: 60px;
+	
+}
+
+.search-bar{
+	width: 500px;
+	height: 60px;
+	margin-left: 180px;
+	margin-top: -3px;
+}
 
 body {
   font-family: Arial;
@@ -78,16 +96,35 @@ form.example::after {
   display: table;
 }
 </style>
+
 <script type="text/javascript">
-	
+
+
+    $(document).ready(function(){//제이쿼리문
+		
+		if("${ not empty param.search }"=="true"){
+			
+			$("#search").val("${ param.search }");
+		}
+		
+		//전체보기면 검색어 지워라
+		if("${ param.search eq 'all'}"== "true"){
+			
+			$("#search_text").val("");
+		}
+		
+	});
+   
+
+
     function login(){
 	    
         location.href="../member/login_form.do?url=" + encodeURIComponent(location.href) ;
  	}
 	
-	function qna_form() {
+	function qna_insertform() {
 		
-		if("${ empty member }" == "true"){
+		if("${ empty user }" == "true"){
 			
 			if(confirm("글쓰기는 로그인 후에 가능합니다\n로그인 하시겠습니까?")==false)return;
 			
@@ -97,10 +134,32 @@ form.example::after {
 		}
 		
 		//글쓰기 폼으로 이동
-		location.href="qna_form.do"; // /support/qna.jsp
+		location.href="qna_insertform.do"; // /support/qna.jsp
 		
 	}//end:insert_form()
+
+    function find(){
+	  
+	  let search		=	$("#search").val();
+	  let search_text	=	$("#search_text").val().trim();
+	  
+	  //전체검색이 아닌데 검색어가 비어있으면 //내가 넘기는 데이터가 uft-8이면 생략해도됌
+	                                          //단 특수문자 & 문자(한글)를 넘기려면 encode uft-8입력
+	  if(search!='all' && search_text==''){
+		  alert('검색어를 입력하세요!!');
+		  $("#search_text").val("");
+		  $("#search_text").focus();
+		  return;
+	  }
+	  
+	  location.href="qna.do?search=" + search  +  "&search_text="   + encodeURIComponent(search_text,"uft-8");
+			       
+     }// end: find()
+
+
+
 </script>
+
 </head>
 
 <body>
@@ -129,25 +188,48 @@ form.example::after {
 					<hr class="hidden-sm hidden-md hidden-lg">
 				  </div>
 				  
-				  <div class="col-sm-8">
+				  <div class="col-sm-9">
 					<h2>1:1문의</h2> 
+
+					<div id="search_box" class="row" >
+						<form class="form-inline">  
 						
+							  <select id="search" name="search" class="form-control" style="height: 40px; width: 179px; float:left;";>
+								  <option value="all">전체보기</option>
+								  <option value="name">이름</option>
+								  <option value="subject">제목</option>
+								  <option value="content">내용</option>
+								  <option value="name_subject_content">이름+제목+내용</option>
+								  
+							  </select>
 						
-						<form class="example" action="/action_page.php">
-						
-						  <input type="text" placeholder="검색어를 입력하세요.." name="search">
-						  <button type="search-bar" class="btn btn-primary"><i class="fa fa-search"></i></button>
+
+							  
+							 
+							<div class="search-bar" style="width:700px;">
+								
+									                                                                       <!-- 검색창에 검색어가 없어서 null이어도 null 표시하지 않음 -->
+								  <input type="text" placeholder="검색어를 입력하세요.." name="search_text"  value="${  param.search_text eq 'null' ? '' : param.search_text}" style="float:left;width:500px;height:40px;">
+								  <button type="search-bar" class="btn btn-primary";   onclick="find();return false;">
+									 <i class="fa fa-search" style="float:left;height:20px;"></i>
+								  </button>
+							</div>
+
+								
 						</form>
-						</div>
-					    <br>
+					   </div>
+					</div>
+						
+						
+						
 
 
 					<div class="col-sm-8">
-						
-						<div class="row" style="margin-bottom: 5px;">
-							<form class="col-sm-3">
-							   <input class="btn btn-success" type="button"  value="문의하기"
-										  onclick="location.href='qna_form.do'" >
+						<h5>1:1문의 게시판입니다. 문의사항 남겨주시면 신속히 답변해드리겠습니다.</h5>
+						<div class="row" style="margin-bottom: 5px; margin-left: 2px;">
+							<form >
+							   <input type="button"  value="문의하기" style="margin-left: -40px;"
+										  onclick="location.href='qna_insertform.do'">
 							   
 							</form>
 						 
@@ -168,12 +250,11 @@ form.example::after {
 								<tr>
 									<!-- 번호 -->
 									<td>
-										${i.count}
+										${ vo.no }
 									</td>                                             
 									
 									<!-- 제목 -->
 									<td>
-								
 										<!-- 메인글이 아니면 ㄴ 붙여라 -->
 										<c:if test="${ vo.b_step ne 0 }">ㄴ</c:if><!-- ne = not 이퀄 -->
 						
@@ -181,7 +262,7 @@ form.example::after {
 										<c:if test="${ vo.b_use eq 'y' }">
 										<a href="qna_view.do?b_idx=${ vo.b_idx }&page=${ empty param.page ? 1 : param.page }">${ vo.b_subject }</a>
 										</c:if>
-									</td>
+										</td>
 									
 									<!-- 작성자 -->
 									<td class="mem_name">
@@ -216,9 +297,9 @@ form.example::after {
 							<!-- 페이지 메뉴 -->
 							<tr>
 								<td colspan="6" align="center">
-									<br>
-									<br>
+
 									<!-- Page Menu -->
+									${ pageMenu }
 									<ul class="page"></ul>
 								</td>
 							</tr>

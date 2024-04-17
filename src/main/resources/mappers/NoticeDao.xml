@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie.filmmatch.support.dao.NoticeDao">
+
+    <!-- 공지사항 페이지에 따른 목록조회 -->
+	<select id="selectList" parameterType="int" resultType="notice">
+		select * from notice    order by n_idx desc limit #{ count }
+	</select>
+
+    <!-- 공지사항 검색 조회 -->
+	<select id="selectConditionList" parameterType="Map" resultType="notice">
+		
+		select * from
+		(
+			select 
+				s.*, rank() over(order by n_idx desc) as n_no 
+			from
+			(
+		
+			select * from notice
+			<trim prefix="where" prefixOverrides="or"><!--prefixOverrides: 프리픽스재정의=or는 또는  -->
+		   	
+		   		<if test="name!=null">
+		   			mem_name like  concat( '%', #{ name }, '%' )
+		   		</if>
+		   		
+		   		<if test="subject!=null"> 
+		   		 or	n_subject like  concat( '%', #{ subject }, '%' )
+		   		</if>
+		   		
+		   		<if test="content!=null"> 
+		   		 or n_content like  concat( '%', #{ content }, '%' )
+		   		</if>
+
+			</trim>
+
+		) s
+	) ss
+	where n_no between #{ start } and #{ end }
+		
+	</select>
+
+	<!-- 조건별 검색된 게시물 수 -->
+    <select id="selectConditionRowTotal" parameterType="Map" resultType="int">
+		
+		select 
+			ifnull(count(*),0) 
+		from
+		(
+			select * from notice
+			<trim prefix="where" prefixOverrides="or"><!--prefixOverrides: 프리픽스재정의=or는 또는  -->
+				
+					<if test="name!=null">
+						mem_name like  concat( '%', #{ name }, '%' )
+					</if>
+					<if test="subject!=null"> 
+					or n_subject like  concat( '%', #{ subject }, '%' )
+					</if>
+					<if test="content!=null"> 
+					or n_content like  concat( '%', #{ content }, '%' )
+					</if>
+			</trim>
+		) s
+		
+		
+	</select>
+
+    <!-- 공지사항 1개 조회 -->
+	<select id="selectOne"  parameterType="int" resultType="notice">
+		select * from notice where n_idx=#{ n_idx }
+	</select>
+
+
+    <!-- 공지사항 글올리기 -->
+	<insert id="insert"  parameterType="notice">
+       insert into notice(n_idx, n_subject, mem_idx, mem_name, n_content, n_regdate) 
+                   values(#{n_idx},#{ n_subject } ,#{ mem_idx },#{ mem_name } , #{ n_content } , now())
+    </insert>
+
+	<!-- 공지사항 글삭제 -->
+    <delete id="delete" parameterType="int">
+       delete from notice where n_idx = #{ n_idx }
+    </delete>
+
+	<!-- 공지사항 수정 -->
+	<update id="update" parameterType="notice">
+    
+       update notice set n_subject = #{ n_subject },
+                      n_content = #{ n_content },
+                      n_ip = #{ n_ip },
+                      n_regdate=now()
+     where n_idx = #{ n_idx } 
+	 </update> 
+
+	  <!-- 조회수 증가 -->
+	<update id="update_readhit" parameterType="int">
+		update notice set n_readhit = n_readhit+1 where n_idx = #{n_idx}
+	</update>
+
+
+
+
+
+</mapper>
